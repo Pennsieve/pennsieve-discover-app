@@ -42,8 +42,8 @@ export default {
   },
   env: {
     discover_api_host:
-    process.env.PENNSIEVE_DISCOVER_API_HOST ||
-    'https://api.pennsieve.io/discover',
+      process.env.PENNSIEVE_DISCOVER_API_HOST ||
+      'https://api.pennsieve.io/discover',
     zipit_host:
       process.env.PENNSIEVE_ZIPIT_HOST ||
       'https://api.pennsieve.io/zipit/discover',
@@ -66,7 +66,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/bootstrap', '@/plugins/element-ui'],
+  plugins: ['@/plugins/bootstrap', '@/plugins/element-ui', '@/plugins/amplify'],
   /*
    ** Nuxt.js dev-modules
    */

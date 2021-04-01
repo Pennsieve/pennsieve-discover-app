@@ -164,6 +164,8 @@
 <script>
 import Cookies from 'js-cookie'
 import { mapActions } from 'vuex'
+import { propOr, pathOr } from 'ramda'
+import Auth from '@aws-amplify/auth'
 import BfButton from '@/components/shared/BfButton/BfButton.vue'
 import EventBus from '@/utils/event-bus'
 
@@ -440,44 +442,46 @@ export default {
     /**
      * Handle login request after validation
      */
-    sendLoginRequest() {
+    async sendLoginRequest() {
       this.isLoggingIn = true
-      this.$axios
-        .post(this.loginUrl, {
-          email: this.logInForm.email,
-          password: this.logInForm.password
+      try {
+        const user = await Auth.signIn(
+          this.logInForm.email,
+          this.logInForm.password
+        )
+        this.handleLoginSuccess(user)
+      } catch (error) {
+        EventBus.$emit('toast', {
+          detail: {
+            msg: `There was an error with your login attempt. Please try again.`
+          }
         })
-        .then(this.handleLoginSuccess.bind(this))
-        .catch(() => {
-          EventBus.$emit('toast', {
-            detail: {
-              msg: `There was an error with your login attempt. Please try again.`
-            }
-          })
-        })
-        .finally(() => {
-          this.isLoggingIn = false
-        })
+      }
+      this.isLoggingIn = false
     },
 
     /**
      * Handle a successful login: set vuex state
      * and cookies, close login dialog
      */
-    handleLoginSuccess(response) {
-      const token = response.data.sessionToken || ''
-      const profile = response.data.profile || ''
+    handleLoginSuccess(user) {
+      const token = pathOr(
+        '',
+        ['signInUserSession', 'accessToken', 'jwtToken'],
+        user
+      )
+      const userAttributes = propOr({}, 'attributes', user)
+      console.log('this is user ', user)
+      // if (response.status === 202) {
+      //   this.tempSessionToken = token
+      //   this.logInState = this.states.TWO_FACTOR
 
-      if (response.status === 202) {
-        this.tempSessionToken = token
-        this.logInState = this.states.TWO_FACTOR
-
-        this.$nextTick(() => {
-          this.$refs.twoFactor.focus()
-        })
-      } else {
-        this.setLogin(token, profile)
-      }
+      //   this.$nextTick(() => {
+      //     this.$refs.twoFactor.focus()
+      //   })
+      // } else {
+      this.setLogin(token, userAttributes)
+      // }
     },
 
     /**
@@ -485,11 +489,11 @@ export default {
      * @param {String} token
      * @param {Object} profile
      */
-    setLogin(token, profile) {
+    setLogin(token, userAttributes) {
       Cookies.set('user_token', token)
 
       this.updateUserToken(token)
-      this.updateProfile(profile)
+      // this.updateProfile(profile)
       this.closeLogInDialog()
     },
 
