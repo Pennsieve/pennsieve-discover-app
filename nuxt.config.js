@@ -53,7 +53,8 @@ export default {
     api_host: process.env.PENNSIEVE_API_HOST || 'https://api.pennsieve.io',
     region: process.env.REGION || 'us-east-1',
     userPoolId: process.env.USER_POOL_ID || 'us-east-1_XciE1JSvP',
-    userPoolWebClientId: process.env.USER_POOL_WEB_CLIENT_ID || '2653f5r4vgk8eo1p17nvaftaea'
+    userPoolWebClientId:
+      process.env.USER_POOL_WEB_CLIENT_ID || '2653f5r4vgk8eo1p17nvaftaea'
   },
   /*
    ** Customize the progress-bar color

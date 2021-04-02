@@ -504,11 +504,8 @@ export default {
      */
     sendResetPasswordEmailRequest() {
       this.isSendingResetEmail = true
-      const email = this.forgotPasswordForm.email || ''
-      const url = this.generateResetPasswordEmailUrl(email)
-      this.$axios
-        .$post(url)
-        .then(() => this.toResetPasswordState())
+      Auth.forgotPassword(this.forgotPasswordForm.email)
+        .then(this.toResetPasswordState())
         .catch(() => {
           EventBus.$emit('toast', {
             detail: {
