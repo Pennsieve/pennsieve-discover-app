@@ -311,11 +311,11 @@ export default {
     },
 
     /**
-     * Login api url
+     * User api url
      * @returns {String}
      */
-    loginUrl() {
-      return `${process.env.api_host}/account/login`
+    userUrl() {
+      return `${process.env.api_host}/user`
     },
 
     twoFactorUrl() {
@@ -471,17 +471,16 @@ export default {
         user
       )
       const userAttributes = propOr({}, 'attributes', user)
-      console.log('this is user ', user)
-      // if (response.status === 202) {
-      //   this.tempSessionToken = token
-      //   this.logInState = this.states.TWO_FACTOR
+      if (user.preferredMFA !== 'NOMFA') {
+        this.tempSessionToken = token
+        this.logInState = this.states.TWO_FACTOR
 
-      //   this.$nextTick(() => {
-      //     this.$refs.twoFactor.focus()
-      //   })
-      // } else {
-      this.setLogin(token, userAttributes)
-      // }
+        this.$nextTick(() => {
+          this.$refs.twoFactor.focus()
+        })
+      } else {
+        this.setLogin(token, userAttributes)
+      }
     },
 
     /**
@@ -493,7 +492,10 @@ export default {
       Cookies.set('user_token', token)
 
       this.updateUserToken(token)
-      // this.updateProfile(profile)
+      const url = `${this.userUrl}` + `?api_key=${token}`
+      this.$axios.$get(url).then((response) => {
+        this.updateProfile(response)
+      })
       this.closeLogInDialog()
     },
 

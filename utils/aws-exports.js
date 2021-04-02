@@ -1,8 +1,8 @@
 const awsConfig = {
   Auth: {
-    region: process.env.REGION,
-    userPoolId: process.env.USER_POOL_ID,
-    userPoolWebClientId: process.env.USER_POOL_WEB_CLIENT_ID
+    region: process.env.region,
+    userPoolId: process.env.userPoolId,
+    userPoolWebClientId: process.env.userPoolWebClientId
   }
 }
 export default awsConfig
