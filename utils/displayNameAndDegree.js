@@ -1,6 +1,6 @@
 export const displayName = (data) => {
   const { firstName, middleInitial, lastName } = data
-  return Object.values({ firstName, lastName, middleInitial })
+  return Object.values({ firstName, middleInitial, lastName })
     .filter((val) => val && val.length)
     .join(' ')
 }
