@@ -488,7 +488,7 @@ export default {
      * @param {String} token
      * @param {Object} profile
      */
-    setLogin(token, userAttributes) {
+    setLogin(token) {
       Cookies.set('user_token', token)
 
       this.updateUserToken(token)
