@@ -1,6 +1,6 @@
 import { pathOr, propOr } from 'ramda'
 import { mapState, mapActions } from 'vuex'
-import Cookies from 'js-cookie'
+import Auth from '@aws-amplify/auth'
 import EventBus from '../../utils/event-bus'
 import logger from '../../mixins/logger'
 import LogoutHandler from '@/mixins/logout-handler'
@@ -65,19 +65,17 @@ export default {
     /**
      * Handle logout
      */
-    onLogout() {
-      const token = Cookies.get('user_token') || this.userToken || ''
-      const url = `${process.env.api_host}/account/logout?api_key=${token}`
-      this.$axios
-        .$post(url)
-        .then(this.handleLogout())
-        .catch(() => {
-          EventBus.$emit('toast', {
-            detail: {
-              msg: `There was an error with your sign out attempt. Please try again.`
-            }
-          })
+    async onLogout(payload) {
+      try {
+        await Auth.signOut()
+        this.handleLogout(payload)
+      } catch (error) {
+        EventBus.$emit('toast', {
+          detail: {
+            msg: `There was an error with your sign out attempt. Please try again.`
+          }
         })
+      }
     },
 
     /**

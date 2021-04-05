@@ -42,15 +42,18 @@ export default {
   },
   env: {
     discover_api_host:
-    process.env.PENNSIEVE_DISCOVER_API_HOST ||
-    'https://api.pennsieve.io/discover',
+      process.env.PENNSIEVE_DISCOVER_API_HOST ||
+      'https://api.pennsieve.io/discover',
     zipit_host:
       process.env.PENNSIEVE_ZIPIT_HOST ||
       'https://api.pennsieve.io/zipit/discover',
     max_download_size: parseInt(process.env.MAX_DOWNLOAD_SIZE || '5000000000'),
     googleTagManager: process.env.PENNSIEVE_DISCOVER_GOOGLE_TAG_MANAGER || '',
     siteUrl: process.env.SITE_URL || 'https://localhost:3000',
-    api_host: process.env.PENNSIEVE_API_HOST || 'https://api.pennsieve.io'
+    api_host: process.env.PENNSIEVE_API_HOST || 'https://api.pennsieve.io',
+    region: process.env.REGION || 'us-east-1',
+    userPoolId: process.env.USER_POOL_ID || 'us-east-1_XciE1JSvP',
+    userPoolWebClientId: process.env.USER_POOL_WEB_CLIENT_ID || '2653f5r4vgk8eo1p17nvaftaea'
   },
   /*
    ** Customize the progress-bar color
@@ -66,7 +69,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/bootstrap', '@/plugins/element-ui'],
+  plugins: ['@/plugins/bootstrap', '@/plugins/element-ui', '@/plugins/amplify'],
   /*
    ** Nuxt.js dev-modules
    */
