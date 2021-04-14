@@ -164,6 +164,8 @@
 <script>
 import Cookies from 'js-cookie'
 import { mapActions } from 'vuex'
+import { propOr, pathOr } from 'ramda'
+import Auth from '@aws-amplify/auth'
 import BfButton from '@/components/shared/BfButton/BfButton.vue'
 import EventBus from '@/utils/event-bus'
 
@@ -309,11 +311,11 @@ export default {
     },
 
     /**
-     * Login api url
+     * User api url
      * @returns {String}
      */
-    loginUrl() {
-      return `${process.env.api_host}/account/login`
+    userUrl() {
+      return `${process.env.api_host}/user`
     },
 
     twoFactorUrl() {
@@ -440,35 +442,36 @@ export default {
     /**
      * Handle login request after validation
      */
-    sendLoginRequest() {
+    async sendLoginRequest() {
       this.isLoggingIn = true
-      this.$axios
-        .post(this.loginUrl, {
-          email: this.logInForm.email,
-          password: this.logInForm.password
+      try {
+        const user = await Auth.signIn(
+          this.logInForm.email,
+          this.logInForm.password
+        )
+        this.handleLoginSuccess(user)
+      } catch (error) {
+        EventBus.$emit('toast', {
+          detail: {
+            msg: `There was an error with your login attempt. Please try again.`
+          }
         })
-        .then(this.handleLoginSuccess.bind(this))
-        .catch(() => {
-          EventBus.$emit('toast', {
-            detail: {
-              msg: `There was an error with your login attempt. Please try again.`
-            }
-          })
-        })
-        .finally(() => {
-          this.isLoggingIn = false
-        })
+      }
+      this.isLoggingIn = false
     },
 
     /**
      * Handle a successful login: set vuex state
      * and cookies, close login dialog
      */
-    handleLoginSuccess(response) {
-      const token = response.data.sessionToken || ''
-      const profile = response.data.profile || ''
-
-      if (response.status === 202) {
+    handleLoginSuccess(user) {
+      const token = pathOr(
+        '',
+        ['signInUserSession', 'accessToken', 'jwtToken'],
+        user
+      )
+      const userAttributes = propOr({}, 'attributes', user)
+      if (user.preferredMFA !== 'NOMFA') {
         this.tempSessionToken = token
         this.logInState = this.states.TWO_FACTOR
 
@@ -476,7 +479,7 @@ export default {
           this.$refs.twoFactor.focus()
         })
       } else {
-        this.setLogin(token, profile)
+        this.setLogin(token, userAttributes)
       }
     },
 
@@ -485,11 +488,14 @@ export default {
      * @param {String} token
      * @param {Object} profile
      */
-    setLogin(token, profile) {
+    setLogin(token) {
       Cookies.set('user_token', token)
 
       this.updateUserToken(token)
-      this.updateProfile(profile)
+      const url = `${this.userUrl}` + `?api_key=${token}`
+      this.$axios.$get(url).then((response) => {
+        this.updateProfile(response)
+      })
       this.closeLogInDialog()
     },
 
@@ -498,11 +504,8 @@ export default {
      */
     sendResetPasswordEmailRequest() {
       this.isSendingResetEmail = true
-      const email = this.forgotPasswordForm.email || ''
-      const url = this.generateResetPasswordEmailUrl(email)
-      this.$axios
-        .$post(url)
-        .then(() => this.toResetPasswordState())
+      Auth.forgotPassword(this.forgotPasswordForm.email)
+        .then(this.toResetPasswordState())
         .catch(() => {
           EventBus.$emit('toast', {
             detail: {

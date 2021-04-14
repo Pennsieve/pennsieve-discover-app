@@ -1,6 +1,6 @@
 {
   "name": "pennsieve-discover-app",
-  "version": "4.5.0",
+  "version": "5.0.0",
   "description": "Pennsieve Discover",
   "author": "University of Pennsylvania",
   "private": true,
@@ -22,6 +22,8 @@
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/gtm": "^2.2.3",
     "@nuxtjs/robots": "^2.4.2",
+    "amplify": "^0.0.11",
+    "aws-amplify": "^3.3.26",
     "element-ui": "^2.4.11",
     "flexboxgrid": "^6.3.1",
     "generate-changelog": "^1.8.0",
