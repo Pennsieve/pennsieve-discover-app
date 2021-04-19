@@ -183,7 +183,6 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie'
 import NoSearchResults from '@/components/NoSearchResults/NoSearchResults.vue'
 import Request from '@/mixins/request'
 import BfHeader from '@/components/shared/BfHeader/BfHeader.vue'
@@ -215,11 +214,11 @@ export default {
     }
   },
 
-  async asyncData({ $axios, error, query }) {
+  async asyncData({ $axios, error, query, $cookies }) {
     try {
       let url = `${process.env.discover_api_host}/search/datasets?limit=${pageSize}&offset=0&query=${query.q}`
       const tagsUrl = `${process.env.discover_api_host}/tags`
-      const token = Cookies.get('user_token')
+      const token = $cookies.get('user_token')
       if (token) {
         url = `${url}&api_key=${token}`
         // @TODO add back in when endpoint issue has been resolved.

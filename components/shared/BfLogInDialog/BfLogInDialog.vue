@@ -162,7 +162,6 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie'
 import { mapActions } from 'vuex'
 import { propOr, pathOr } from 'ramda'
 import Auth from '@aws-amplify/auth'
@@ -489,7 +488,7 @@ export default {
      * @param {Object} profile
      */
     setLogin(token) {
-      Cookies.set('user_token', token)
+      this.$cookies.set('user_token', token)
 
       this.updateUserToken(token)
       const url = `${this.userUrl}` + `?api_key=${token}`
