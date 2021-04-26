@@ -56,6 +56,7 @@
         </div>
         <bf-button
           v-if="isGetDatasetBtnVisible"
+          key="btn-get-dataset"
           :disabled="isGetDatasetBtnDisabled"
           class="get-dataset-button"
           @click="getDataset"
@@ -64,6 +65,7 @@
         </bf-button>
         <bf-button
           v-if="isDatasetEmbargoed && datasetDetails.embargoAccess === null"
+          key="btn-request-access"
           class="get-dataset-button"
           :disabled="!userToken"
           @click="onRequestAccessClick"
@@ -77,6 +79,7 @@
             isDatasetEmbargoed &&
               datasetDetails.embargoAccess === EMBARGO_ACCESS.REQUESTED
           "
+          key="request-access-pending"
           class="requested-label"
         >
           Your request for access is pending.

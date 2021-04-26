@@ -1,5 +1,4 @@
 import { mapActions } from 'vuex'
-import Cookies from 'js-cookie'
 import EventBus from '../../utils/event-bus'
 
 export default {
@@ -13,7 +12,7 @@ export default {
       // clear vuex
       this.clearState()
       // remove user token
-      Cookies.remove('user_token')
+      this.$cookies.remove('user_token')
       // send toast
       EventBus.$emit('toast', {
         detail: {

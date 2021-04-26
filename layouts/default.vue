@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie'
 import globalMessageHandler from '@/mixins/global-message-handler'
 
 export default {
@@ -20,7 +19,7 @@ export default {
      * If cookie exists on load, login user automatically
      */
     bootUp() {
-      const token = Cookies.get('user_token')
+      const token = this.$cookies.get('user_token')
       if (token) {
         this.getProfile(token)
       }

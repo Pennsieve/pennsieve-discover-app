@@ -25,7 +25,6 @@
 <script>
 import { propOr, pathOr } from 'ramda'
 
-import Cookies from 'js-cookie'
 import BfFooter from '@/components/shared/BfFooter/BfFooter.vue'
 import BfHeader from '@/components/shared/BfHeader/BfHeader.vue'
 import DatasetDetails from '@/components/DatasetDetails/DatasetDetails.vue'
@@ -67,10 +66,11 @@ const getAgreement = async (dataset, $axios) => {
 /**
  * Generate the url with token from cookies
  * @param {String} url
+ * @param {Object} $cookies
  * @returns {String}
  */
-const generateUrlWithToken = (url) => {
-  const token = Cookies.get('user_token')
+const generateUrlWithToken = (url, $cookies) => {
+  const token = $cookies.get('user_token')
   return token ? `${url}?api_key=${token}` : url
 }
 
@@ -78,13 +78,14 @@ const generateUrlWithToken = (url) => {
  * Get dataset
  * @param {Object} params
  * @param {Object} $axios
+ * @param {Object} $cookies
  * @returns {Object}
  */
-const getDataset = (params, $axios) => {
+const getDataset = (params, $axios, $cookies) => {
   try {
     const url = `${process.env.discover_api_host}/datasets/${params.id}`
     let fullUrl = params.version ? `${url}/versions/${params.version}` : url
-    fullUrl = generateUrlWithToken(fullUrl)
+    fullUrl = generateUrlWithToken(fullUrl, $cookies)
 
     return $axios
       .$get(fullUrl)
@@ -121,12 +122,14 @@ const getDataset = (params, $axios) => {
  * Get all the versions of the datasets
  * @param {Object} params
  * @param {Object} $axios
+ * @param {Object} $cookies
  * @returns {Object}
  */
-const getDatasetVersions = (params, $axios) => {
+const getDatasetVersions = (params, $axios, $cookies) => {
   try {
     const url = generateUrlWithToken(
-      `${process.env.discover_api_host}/datasets/${params.id}/versions`
+      `${process.env.discover_api_host}/datasets/${params.id}/versions`,
+      $cookies
     )
     return $axios.$get(url).then((response) => {
       return response.sort((a, b) => a.verson - b.version)
@@ -170,10 +173,10 @@ export default {
     }
   },
 
-  async asyncData({ $axios, params, error, req }) {
-    const dataset = await getDataset(params, $axios)
+  async asyncData({ $axios, params, error, req, $cookies }) {
+    const dataset = await getDataset(params, $axios, $cookies)
 
-    const versions = await getDatasetVersions(params, $axios)
+    const versions = await getDatasetVersions(params, $axios, $cookies)
 
     const { hasAgreement, dataUseAgreement } = await getAgreement(
       dataset.datasetDetails,
