@@ -427,7 +427,11 @@ export default {
 
     executeDownload() {
       const mainPayload = {
-        paths: this.selected.map((f) => f.path),
+        paths: this.selected.map((f) => {
+          const expr = /(s3:\/\/[a-z-1]+\/[0-9]+\/[0-9]+\/)(.*)/
+          const match = f.uri.match(expr)
+          return match[2]
+        }),
         datasetId: this.datasetId,
         version: this.version
       }
