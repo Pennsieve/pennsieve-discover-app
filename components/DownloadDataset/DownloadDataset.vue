@@ -41,7 +41,7 @@
           Raw files and metadata are stored in an AWS S3 Requester Pays bucket.
           You can learn more about
           <a
-            href="https://help.blackfynn.com/en/articles/3359427"
+            href="https://docs.pennsieve.io/docs/downloading-a-public-dataset"
             target="_blank"
           >
             downloading data from AWS
