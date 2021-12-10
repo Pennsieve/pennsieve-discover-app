@@ -397,7 +397,13 @@ export default {
      * @returns {String}
      */
     siteUrl() {
-      return process.env.siteUrl
+      let ShareUrl = process.env.siteUrl
+      ShareUrl += '/datasets/'
+      const ShareID = propOr(0, 'id', this.datasetDetails)
+      const ShareID2 = String(ShareID)
+      ShareUrl += ShareID2
+
+      return ShareUrl
     },
 
     /**
