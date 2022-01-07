@@ -187,7 +187,6 @@
 <script>
 import { mapState } from 'vuex'
 
-import Cookies from 'js-cookie'
 import Request from '@/mixins/request'
 import BfHeader from '@/components/shared/BfHeader/BfHeader.vue'
 import BfFooter from '@/components/shared/BfFooter/BfFooter.vue'
@@ -221,11 +220,11 @@ export default {
     }
   },
 
-  async asyncData({ $axios, error }) {
+  async asyncData({ $axios, error, $cookies }) {
     try {
       let url = `${process.env.discover_api_host}/datasets?limit=${pageSize}&offset=0`
       const tagsUrl = `${process.env.discover_api_host}/tags`
-      const token = Cookies.get('user_token')
+      const token = $cookies.get('user_token')
       if (token) {
         url = `${url}&api_key=${token}`
         // @TODO add back in when endpoint issue has been resolved.
