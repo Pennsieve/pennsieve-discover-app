@@ -2,6 +2,10 @@
 
 > Pennsieve Discover
 
+## Pre-requisites:
+- yarn
+- Node.js v12.x
+
 ## Build Setup
 
 ``` bash
