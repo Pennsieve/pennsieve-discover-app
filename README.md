@@ -24,3 +24,12 @@ $ yarn generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+
+## Deployment
+The **Pennsieve Disciver** app is hosted on [Heroku](https://heroku.com/). Specifics on how the application is deployed can be found by logging into Heroku, clicking on *Depoy* tab and viewing the *Deployment method*.
+
+### Non-production
+TBD
+
+### Production
+TBD
