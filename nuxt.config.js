@@ -52,9 +52,11 @@ export default {
     siteUrl: process.env.SITE_URL || 'https://localhost:3000',
     api_host: process.env.PENNSIEVE_API_HOST || 'https://api.pennsieve.io',
     region: process.env.REGION || 'us-east-1',
-    userPoolId: process.env.USER_POOL_ID || 'us-east-1_XciE1JSvP',
+    userPoolId: process.env.USER_POOL_ID || 'us-east-1_FVLhJ7CQA',
     userPoolWebClientId:
-      process.env.USER_POOL_WEB_CLIENT_ID || '2653f5r4vgk8eo1p17nvaftaea'
+      process.env.USER_POOL_WEB_CLIENT_ID || '703lm5d8odccu21pagcfjkeaea',
+    authenticationFlowType:
+      process.env.AUTHENTICATION_FLOW_TYPE || 'USER_PASSWORD_AUTH',
   },
   /*
    ** Customize the progress-bar color
