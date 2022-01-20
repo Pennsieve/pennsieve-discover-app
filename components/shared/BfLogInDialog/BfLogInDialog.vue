@@ -52,7 +52,7 @@
               >Forgot Password?</a
             >
             |
-            <a href="https://www.blackfynn.com/academia/" target="_blank"
+            <a href="https://docs.pennsieve.io" target="_blank"
               >Learn More</a
             >
           </div>
@@ -104,7 +104,7 @@
           <a
             class="log-in-dialog__container--actions"
             :class="actionsClass"
-            href="https://help.blackfynn.com/en/"
+            href="https://docs.pennsieve.io"
             target="_blank"
             >Need Help?</a
           >
@@ -113,14 +113,14 @@
           By signing in to Pennsieve, you accept our
           <a
             class="grey-link"
-            href="https://www.blackfynn.com/terms"
+            href="https://docs.pennsieve.io/page/pennsieve-terms-of-use"
             target="_blank"
             >Terms of Use</a
           >
           and
           <a
             class="grey-link"
-            href="https://www.blackfynn.com/privacy/"
+            href="https://docs.pennsieve.io/page/privacy-policy"
             target="_blank"
             >Privacy Policy</a
           >.
