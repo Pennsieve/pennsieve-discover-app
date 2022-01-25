@@ -57,7 +57,15 @@
       <el-table-column label="File Name">
         <template slot-scope="scope">
           <div class="file-name-container">
-            <img :src="fileIcon(scope.row.icon, scope.row.type)" alt="Icon" />
+        <!-- conditioanlly renders time series data icon as a link to the time series viewer-->
+           <div v-if="filetype === timeseries" class="cond-tsv">
+               <nuxt-link :to="{ name: 'datasets-id', params: { id: dataset.id } }">
+                <img :src="fileIcon(scope.row.icon, scope.row.type)" alt="Icon" />
+               </nuxt-link>
+           </div>
+          <div v-else class="cond-tsv">
+                <img :src="fileIcon(scope.row.icon, scope.row.type)" alt="Icon" />
+          </div>
             <div v-if="formatType(scope.row) === 'Folder'" class="name">
               <a
                 href="#"
