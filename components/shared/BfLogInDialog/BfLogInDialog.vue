@@ -52,9 +52,7 @@
               >Forgot Password?</a
             >
             |
-            <a href="https://docs.pennsieve.io" target="_blank"
-              >Learn More</a
-            >
+            <a href="https://docs.pennsieve.io" target="_blank">Learn More</a>
           </div>
         </template>
         <template v-else-if="isForgotPasswordState">
