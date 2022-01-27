@@ -56,7 +56,7 @@ export default {
     userPoolWebClientId:
       process.env.USER_POOL_WEB_CLIENT_ID || '703lm5d8odccu21pagcfjkeaea',
     authenticationFlowType:
-      process.env.AUTHENTICATION_FLOW_TYPE || 'USER_PASSWORD_AUTH',
+      process.env.AUTHENTICATION_FLOW_TYPE || 'USER_PASSWORD_AUTH'
   },
   /*
    ** Customize the progress-bar color
