@@ -71,7 +71,7 @@
 =======
            <!-- need to send payload to other component via an event bus (https://medium.com/@kashifazmi94/sharing-data-between-component-in-vue-js-acfd71e05815) -->
 
-            <div v-if="formatType(scope.row) === 'MSExcel'" class="cond-tsv">
+            <div v-if="formatType(scope.row) === 'EDF'" class="cond-tsv">
               <nuxt-link 
                          :to="{name: 'tsv-tsvid', params: {tsvid: scope.row }}">
                     
