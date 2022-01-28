@@ -1,3 +1,4 @@
+<!--prettier-ignore-->
 <template>
   <div class="dataset-files">
     <h3>Files</h3>
@@ -57,6 +58,7 @@
       <el-table-column label="File Name">
         <template slot-scope="scope">
           <div class="file-name-container">
+<<<<<<< Updated upstream
         <!-- conditioanlly renders time series data icon as a link to the time series viewer-->
            <div v-if="filetype === timeseries" class="cond-tsv">
                <nuxt-link :to="{ name: 'datasets-id', params: { id: dataset.id } }">
@@ -66,6 +68,24 @@
           <div v-else class="cond-tsv">
                 <img :src="fileIcon(scope.row.icon, scope.row.type)" alt="Icon" />
           </div>
+=======
+           <!-- need to send payload to other component via an event bus (https://medium.com/@kashifazmi94/sharing-data-between-component-in-vue-js-acfd71e05815) -->
+
+            <div v-if="formatType(scope.row) === 'MSExcel'" class="cond-tsv">
+              <nuxt-link 
+                         :to="{name: 'tsv-tsvid', params: {tsvid: scope.row }}">
+                    
+                  <img
+                       :src="fileIcon(scope.row.icon, scope.row.type)"
+                       alt="Icon" onclick="emitFileData(scope.row)"
+                       />
+              </nuxt-link>
+            </div>
+            <div v-else class="cond-tsv">
+              <img :src="fileIcon(scope.row.icon, scope.row.type)" alt="Icon" />
+            </div>
+            
+>>>>>>> Stashed changes
             <div v-if="formatType(scope.row) === 'Folder'" class="name">
               <a
                 href="#"
@@ -169,6 +189,7 @@ import BfButton from '../shared/BfButton/BfButton.vue'
 import Request from '@/mixins/request'
 import FileIcon from '@/mixins/file-icon/index'
 import FormatStorage from '@/mixins/bf-storage-metrics/index'
+import { EventBus } from '../event-bus.js'
 
 const ROOT_PATH_NAME = 'Root Directory'
 const DEFAULT_ARCHIVE_NAME = 'blackfynn-discover-data'
@@ -221,7 +242,8 @@ export default {
       confirmDownloadVisible: false,
       archiveName: DEFAULT_ARCHIVE_NAME,
       showReduceSize: false,
-      downloadConfirmed: false
+      downloadConfirmed: false,
+      fileDataTsv: {}
     }
   },
 
@@ -343,6 +365,13 @@ export default {
     formatType(row) {
       return row.type === 'Directory' ? 'Folder' : row.fileType
     },
+    /**
+    *sends relevant files data to TSV page
+    */
+    emitFileData(row){
+      this.fileDataTsv = row;
+      EventBus.$emit("tsvpackage", this.fileDataTsv);
+    }
 
     /**
      * Loads more dataset files
