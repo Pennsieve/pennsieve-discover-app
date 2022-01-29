@@ -67,7 +67,9 @@
               </a>
             </div>
             <div v-else class="name">
-              {{ scope.row.name }}
+              <nuxt-link :to="{ name: 'package-id', params: { id: scope.row.sourcePackageId } }">
+                {{ scope.row.name }}
+              </nuxt-link>
             </div>
           </div>
         </template>
