@@ -5,8 +5,12 @@
       :files="packageFiles.files"
     />
 
+    <pennsieve-viewer
+      :pkg="sourcePackage"
+      :pkgType="packageType"
+    />
 
-    <bf-footer />
+<!--    <bf-footer />-->
   </div>
 </template>
 
@@ -16,6 +20,7 @@ import { propOr, pathOr } from 'ramda'
 import BfFooter from '@/components/shared/BfFooter/BfFooter.vue'
 import BfHeader from '@/components/shared/BfHeader/BfHeader.vue'
 import PackageDetails from "~/components/PackageDetails/PackageDetails";
+import PennsieveViewer from "~/components/viewers/PennsieveViewer/PennsieveViewer";
 
 const getPackageFiles = (params, $axios, $cookies) => {
   try {
@@ -40,7 +45,8 @@ export default {
   components: {
     BfFooter,
     BfHeader,
-    PackageDetails
+    PackageDetails,
+    PennsieveViewer
   },
 
   props: {
@@ -48,9 +54,18 @@ export default {
 
   async asyncData({ $axios, params, error, req, $cookies }) {
     const packageFiles = await getPackageFiles(params, $axios, $cookies)
+    const sourcePackage = params.id
+
+    let packageType = "None"
+    if (packageFiles.files) {
+      packageType = packageFiles.files[0].packageType
+    }
+
 
     return {
-      packageFiles
+      sourcePackage,
+      packageFiles,
+      packageType
     }
   },
 
