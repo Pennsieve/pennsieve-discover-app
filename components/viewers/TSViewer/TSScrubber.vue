@@ -258,8 +258,7 @@
             },
             _requestSegmentSpan: function(channel, channelIdx, start, end, ix) {
                 const max_recursion = this.constants['MAXRECURSION']
-
-                const url = `${this.config.timeSeriesApi}/ts/retrieve/segments?session=${this.userToken}&channel=${channel}&start=${start}&end=${end}`;
+                const url = `${this.config.timeseriesApi}/ts/retrieve/segments?session=${this.userToken}&channel=${channel}&start=${start}&end=${end}`;
                 this.sendXhr(url)
                     .then(resp => {
                         // Parse response into vector
@@ -310,10 +309,15 @@
                             vector.shift();
                         }
 
+                        let newDataSegments = chCongig.dataSegments.concat(vector.sort(function(a, b) {return a - b}));
+                        // chCongig.dataSegments = chCongig.dataSegments.concat(vector.sort(function(a, b) {return a - b}));
 
-                        chCongig.dataSegments = chCongig.dataSegments.concat(vector.sort(function(a, b) {return a - b}));
-
-                        this.$store.dispatch('viewer/updateChannel', chCongig)
+                        this.$store.dispatch('viewer/updateViewChannel', {
+                          channelId: chCongig.id,
+                          data: {
+                            dataSegments: newDataSegments
+                          }
+                        })
 
                         // If we did not request all segment-spans yet, get next segment or bail when recursion limit.
                         let span = end - start;

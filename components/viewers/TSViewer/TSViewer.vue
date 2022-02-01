@@ -3,18 +3,18 @@
     ref="ts_viewer"
     class="timeseries-viewer"
   >
-<!--    <timeseries-scrubber-->
-<!--      ref="scrubber"-->
-<!--      :ts_start="ts_start"-->
-<!--      :ts_end="ts_end"-->
-<!--      :c-width="cWidth"-->
-<!--      :label-width="labelWidth"-->
-<!--      :cursor-loc="cursorLoc"-->
-<!--      :start="start"-->
-<!--      :duration="duration"-->
-<!--      :constants="constants"-->
-<!--      @setStart="updateStart"-->
-<!--    />-->
+    <timeseries-scrubber
+      ref="scrubber"
+      :ts_start="ts_start"
+      :ts_end="ts_end"
+      :c-width="cWidth"
+      :label-width="labelWidth"
+      :cursor-loc="cursorLoc"
+      :start="start"
+      :duration="duration"
+      :constants="constants"
+      @setStart="updateStart"
+    />
 
     <div id="channelCanvas">
       <!-- Channel labels -->
@@ -332,7 +332,7 @@
             },
             onChannelsInitialized: function () {
                 // TODO: Bring back
-                // this.$refs.scrubber.initSegmentSpans()
+                this.$refs.scrubber.initSegmentSpans()
 
                 // Resize the canvas as label length likely changed
                 this.$nextTick(() => {

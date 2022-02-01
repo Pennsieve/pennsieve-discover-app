@@ -64,6 +64,14 @@ export const mutations = {
   SET_CHANNELS (state, channels) {
     state.viewerChannels = channels
   },
+  UPDATE_VIEW_CHANNEL  (state, data) {
+    if (data.channelId) {
+      const channelIndex = findIndex(propEq('id', data.channelId), state.viewerChannels)
+      for (let d in data.data) {
+        state.viewerChannels[channelIndex][d] = data.data[d]
+      }
+    }
+  },
 
   SET_ACTIVE_ANNOTATION_LAYER (state, data) {
     state.activeAnnotationLayer = data
@@ -118,6 +126,8 @@ export const actions = {
     commit('SET_ACTIVE_TOOL', evt),
   setChannels: ({ commit }, evt) => {
     commit('SET_CHANNELS', evt)},
+  updateViewChannel: ({commit}, data) => {
+    commit('UPDATE_VIEW_CHANNEL', data)},
   setActiveAnnotationLayer: ({ commit }, evt) =>
     commit('SET_ACTIVE_ANNOTATION_LAYER', evt),
   setAnnotations: ({ commit }, annotations) =>
