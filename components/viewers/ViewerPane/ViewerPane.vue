@@ -3,7 +3,6 @@
       <component
         :is="cmpViewer"
         ref="viewer"
-        :idx="0"
         :pkg="pkg"
       />
   </div>
@@ -131,10 +130,12 @@
   @import '../../../assets/css/_variables.scss';
 
   .viewer-pane, .viewer-wrap {
-    background: #dedede;
+    border: 1px solid $gray_3;
+    border-radius:  5px  5px 0  0;
+    margin: 24px;
     display: flex;
     flex: 1;
     flex-direction: column;
-    position: relative;
+    //position: relative;
   }
 </style>

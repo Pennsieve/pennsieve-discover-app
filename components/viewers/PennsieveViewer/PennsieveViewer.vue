@@ -2,7 +2,7 @@
   <div class="pennsieve-viewer">
 <!--    <bf-header :has-changes="hasChanges" />-->
 
-    <div id="viewer-wrap">
+<!--    <div class="viewer-wrap">-->
 <!--      <viewer-toolbar-->
 <!--        v-show="!hideToolbars"-->
 <!--        class="left"-->
@@ -50,6 +50,7 @@
 <!--      </div>-->
 
       <viewer-pane
+        class="viewer-pane"
         ref="viewerPane"
         :pkg="activeViewer"
       />
@@ -82,7 +83,7 @@
 <!--        :side-panel-open="viewerSidePanelOpen"-->
 <!--        :side-panel-view="viewerSidePanelView"-->
 <!--      />-->
-    </div><!--/#viewer-wrap -->
+<!--    </div>&lt;!&ndash;/#viewer-wrap &ndash;&gt;-->
 
 <!--    <montage-error-dialog-->
 <!--      :is-open="isMontageDialogOpen"-->
@@ -386,5 +387,8 @@ export default {
 </style>
 <style lang="scss">
   .pennsieve-viewer {
+  }
+  .viewer-pane {
+    background-color: white;
   }
 </style>

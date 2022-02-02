@@ -21,6 +21,7 @@
       <div
         id="channelLabels"
         ref="channelLabels"
+        :style="channelStyle"
       >
         <div
           v-for="item in viewerChannels"
@@ -77,19 +78,19 @@
       />
     </div>
 
-<!--    <timeseries-viewer-toolbar-->
-<!--      :constants="constants"-->
-<!--      :duration="duration"-->
-<!--      :start="start"-->
-<!--      @pageBack="onPageBack"-->
-<!--      @pageForward="onPageForward"-->
-<!--      @incrementZoom="onIncrementZoom"-->
-<!--      @decrementZoom="onDecrementZoom"-->
-<!--      @updateDuration="onUpdateDuration"-->
-<!--      @nextAnnotation="onNextAnnotation"-->
-<!--      @previousAnnotation="onPreviousAnnotation"-->
-<!--      @setStart="updateStart"-->
-<!--    />-->
+    <timeseries-viewer-toolbar
+      :constants="constants"
+      :duration="duration"
+      :start="start"
+      @pageBack="onPageBack"
+      @pageForward="onPageForward"
+      @incrementZoom="onIncrementZoom"
+      @decrementZoom="onDecrementZoom"
+      @updateDuration="onUpdateDuration"
+      @nextAnnotation="onNextAnnotation"
+      @previousAnnotation="onPreviousAnnotation"
+      @setStart="updateStart"
+    />
 
 <!--    <timeseries-filter-modal-->
 <!--      ref="filterWindow"-->
@@ -167,6 +168,12 @@
                 'viewerSidePanelOpen',
                 'viewerAnnotations'
             ]),
+            channelStyle: function() {
+              return {
+                height: this.window_height - 110 + 'px'
+              }
+            },
+
 
             _cpStyleLabels: function(height, nrVisCh) {
               const h = Math.max(1, Math.min(12, (height)/nrVisCh-2));
@@ -233,7 +240,7 @@
 
         mounted: function () {
             this.initChannels()
-            this.window_height = window.innerHeight - 100;
+            this.window_height = window.innerHeight - 144 - 80 - 48;
             this.window_width = this.$refs.ts_viewer.offsetWidth
             window.addEventListener('resize', this.onResize)
 
@@ -452,7 +459,7 @@
                     return
                 }
 
-                this.window_height = window.innerHeight - 100;
+                this.window_height = window.innerHeight - 144 - 80 - 48;
                 this.window_width = this.$refs.ts_viewer.offsetWidth
 
                 const labelDiv = this.$refs.channelLabels;
@@ -544,14 +551,14 @@
 
     .timeseries-viewer {
         display: flex;
-        height: 100%;
         flex-direction: column;
     }
 
     #channelCanvas {
         display: flex;
+        height:100%;
         background-color: white;
-        flex: 1;
+        //flex: 1;
     }
 
     #channelLabels {

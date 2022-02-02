@@ -2,10 +2,11 @@
   <div class="package-details">
     <bf-header :isSearchVisible="false"/>
     <package-details
+      class="package-details-content"
       :files="packageFiles.files"
     />
-
     <pennsieve-viewer
+      class="pennsieve-viewer"
       :pkg="sourcePackage"
       :pkgType="packageType"
     />
@@ -91,5 +92,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.package-details {
+  display:flex;
+  flex-direction: column;
+}
+
+.package-details-content  {
+  height: 80px;
+}
+
+.pennsieve-viewer {
+  display: flex;
+}
 
 </style>

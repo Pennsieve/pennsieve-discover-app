@@ -541,6 +541,7 @@
                     this._renderAxis();
                     this._renderCursor();
                     this.$refs.plotCanvas.renderAll()
+                    // TODO: Bring back when supporting public annotations.
                     // this.$refs.annCanvas.render()
                 })
 
