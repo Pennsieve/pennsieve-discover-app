@@ -56,7 +56,12 @@ export default {
     userPoolWebClientId:
       process.env.USER_POOL_WEB_CLIENT_ID || '703lm5d8odccu21pagcfjkeaea',
     authenticationFlowType:
-      process.env.AUTHENTICATION_FLOW_TYPE || 'USER_PASSWORD_AUTH'
+      process.env.AUTHENTICATION_FLOW_TYPE || 'USER_PASSWORD_AUTH',
+    oauthDomain: process.env.OAUTH_DOMAIN || 'pennsieve-dev-users2.auth.us-east-1.amazoncognito.com',
+    oauthScope: ['openid'] || ['openid'],
+    oauthRedirectSignIn: process.env.OAUTH_REDIRECT_SIGNIN || 'http://localhost:3000',
+    oauthRedirectSignOut: process.env.OAUTH_REDIRECT_SIGNOUT || 'http://localhost:3000',
+    oauthResponseType: process.env.OAUTH_RESPONSE_TYPE || 'token'
   },
   /*
    ** Customize the progress-bar color
