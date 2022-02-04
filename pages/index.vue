@@ -185,8 +185,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
+import { mapActions, mapState } from 'vuex'
+import { propOr, pathOr } from 'ramda'
+import Auth from '@aws-amplify/auth'
 import Request from '@/mixins/request'
 import BfHeader from '@/components/shared/BfHeader/BfHeader.vue'
 import BfFooter from '@/components/shared/BfFooter/BfFooter.vue'
@@ -284,10 +285,24 @@ export default {
       const embargoedFilterCount = this.embargoedFilter ? 1 : 0
 
       return publicFilterCount + embargoedFilterCount + this.filteredTags.length
+    },
+
+    /**
+     * User api url
+     * @returns {String}
+     */
+    userUrl() {
+      return `${process.env.api_host}/user`
     }
   },
 
+  mounted() {
+    this.doneMounting()
+  },
+
   methods: {
+    ...mapActions(['updateUserToken', 'updateProfile']),
+
     /**
      * Removes tag filter
      */
@@ -371,6 +386,65 @@ export default {
     setListOptions(options) {
       this.page = 1
       this.getDatasets()
+    },
+/* eslint-disable */
+    getFragmentParameterByName: function(pname) {
+        console.log("getFragmentParameterByName() pname: " + pname)
+        console.log(window.location)
+        var name = pname.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\#&]" + name + "=([^&#]*)"),
+            results = regex.exec(window.location.hash);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    },
+
+    async doneMounting() {
+      console.log("doneMounting()")
+      console.log(window.location)
+      const accessToken = this.getFragmentParameterByName('access_token')
+      console.log(accessToken)
+      if (accessToken) {
+        const user = await Auth.currentAuthenticatedUser()
+        this.handleLoginSuccess(user)
+      }
+      const error = this.getFragmentParameterByName('error_description')
+      if (error) {
+        // this.showOrcidError = true
+      }
+    },
+
+    /**
+     * Handle a successful login: set vuex state
+     * and cookies, close login dialog
+     */
+    handleLoginSuccess(user) {
+      console.log("handleLoginSuccess()")
+      console.log(user)
+      const token = pathOr(
+        '',
+        ['signInUserSession', 'accessToken', 'jwtToken'],
+        user
+      )
+      const userAttributes = propOr({}, 'attributes', user)
+      this.setLogin(token, userAttributes)
+    },
+
+    /**
+     * Log the user in and set the state
+     * @param {String} token
+     * @param {Object} profile
+     */
+    setLogin(token, userAttributes) {
+      console.log("setLogin()")
+      console.log(token)
+      console.log(userAttributes)
+      this.$cookies.set('user_token', token)
+      this.updateUserToken(token)
+
+      const url = `${this.userUrl}` + `?api_key=${token}`
+      this.$axios.$get(url).then((response) => {
+        console.log(response)
+        this.updateProfile(response)
+      })
     }
   },
 

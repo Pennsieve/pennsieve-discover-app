@@ -348,6 +348,12 @@ export default {
     this.toLogInState()
   },
 
+  /* eslint-disable */
+  mounted() {
+    console.log("BfLogInDialog.mounted()")
+    console.log(window.location)
+  },
+
   methods: {
     ...mapActions(['updateUserToken', 'updateProfile']),
 
