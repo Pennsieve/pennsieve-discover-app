@@ -435,7 +435,8 @@ export default {
           return match[2]
         }),
         datasetId: this.datasetId,
-        version: this.version
+        version: this.version,
+        userToken: this.userToken
       }
 
       const [, ...path] = this.filePath
