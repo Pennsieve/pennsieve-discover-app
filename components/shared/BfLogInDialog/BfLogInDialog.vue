@@ -47,12 +47,27 @@
               >
             </el-form-item>
           </el-form>
+          <bf-button
+            class="log-in-dialog__container--federated-login-button"
+            :processing="isLoggingIn"
+            processing-text="Signing In"
+            @click="initiateFederatedLogin('ORCID')"
+            ><img
+              src="~/assets/images/orcid_24x24.png"
+              alt="iD"
+              width="24"
+              height="24"
+              style="display: block; margin-left: auto; margin-right: auto; width: 24px; height: 24px"
+            />Sign In with your ORCID ID</bf-button
+          >
           <div class="log-in-dialog__container--actions" :class="actionsClass">
             <a href="#" @click.prevent="toForgotPasswordState"
               >Forgot Password?</a
             >
             |
-            <a href="https://docs.pennsieve.io" target="_blank">Learn More</a>
+            <a href="https://www.blackfynn.com/academia/" target="_blank"
+              >Learn More</a
+            >
           </div>
         </template>
         <template v-else-if="isForgotPasswordState">
@@ -102,7 +117,7 @@
           <a
             class="log-in-dialog__container--actions"
             :class="actionsClass"
-            href="https://docs.pennsieve.io"
+            href="https://help.blackfynn.com/en/"
             target="_blank"
             >Need Help?</a
           >
@@ -111,14 +126,14 @@
           By signing in to Pennsieve, you accept our
           <a
             class="grey-link"
-            href="https://docs.pennsieve.io/page/pennsieve-terms-of-use"
+            href="https://www.blackfynn.com/terms"
             target="_blank"
             >Terms of Use</a
           >
           and
           <a
             class="grey-link"
-            href="https://docs.pennsieve.io/page/privacy-policy"
+            href="https://www.blackfynn.com/privacy/"
             target="_blank"
             >Privacy Policy</a
           >.
@@ -457,6 +472,21 @@ export default {
       this.isLoggingIn = false
     },
 
+    async initiateFederatedLogin(provider) {
+      this.isLoggingIn = true
+      this.closeLogInDialog()
+      try {
+        await Auth.federatedSignIn({ customProvider: provider })
+      } catch (error) {
+        this.isLoggingIn = false
+        EventBus.$emit('toast', {
+          detail: {
+            msg: `There was an error with your federated login attempt. Please try again.`
+          }
+        })
+      }
+    },
+
     /**
      * Handle a successful login: set vuex state
      * and cookies, close login dialog
@@ -618,8 +648,17 @@ export default {
       margin-bottom: 16px;
     }
 
+    &--federated-login-button {
+      height: 36px;
+      width: 298px;
+      color: black;
+      background-color: whitesmoke;
+      border-color: darkgray;
+    }
+
     &--actions {
       &.log-in {
+        margin-top: 32px;
         margin-bottom: 32px;
         @media (max-width: 48em) {
           margin-bottom: 22px;
