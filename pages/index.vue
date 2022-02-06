@@ -467,9 +467,9 @@ export default {
 
 .header-feature {
   width: 100%;
-  background-color: #404554;
+  background-color: $gray_4;
   box-sizing: border-box;
-  padding: 88px 0 96px;
+  padding: 64px 0 64px;
   position: relative;
   overflow: hidden;
   @media only screen and (max-width: 550px) {
@@ -590,18 +590,18 @@ export default {
     /deep/ .el-checkbox__input {
       .el-checkbox__inner {
         &:hover {
-          border-color: $dopamine;
+          border-color: $purple_1;
         }
       }
       &.is-focus {
         .el-checkbox__inner {
-          border-color: $dopamine;
+          border-color: $purple_1;
         }
       }
       &.is-checked {
         .el-checkbox__inner {
-          border-color: $dopamine;
-          background-color: $dopamine;
+          border-color: $purple_1;
+          background-color: $purple_1;
         }
       }
     }

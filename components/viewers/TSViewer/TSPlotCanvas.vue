@@ -394,9 +394,6 @@
             },
             initChannels: function(channels) {
 
-                if (!channels) {
-                    channels = this.activeViewer.channels
-                }
                 const chObjects = [];
                 if (channels.length > 0) {
 
@@ -472,7 +469,7 @@
                     }
 
                     this.$store.dispatch('viewer/setChannels', channelConfig)
-                    this.$emit('channelsInitialized')
+                    this.$emit('channelsInitialized', channels)
 
                 }
 
@@ -1515,19 +1512,19 @@
                   this.$store.dispatch('viewer/setViewerErrors', { error: 'JSON Parse Error' })
                 }
 
-                if (data.virtualChannels) {
-                  const baseChannels = this.activeViewer.channels
-                  const virtualChannels = data.virtualChannels.map(({ id, name }) => {
-                    const baseChannel = baseChannels.find(ch => (ch.content.id === id))
+                if (data.channelDetails) {
+                  // const baseChannels = this.activeViewer.channels
+                  const virtualChannels = data.channelDetails.map(({ id, name, unit, channelType, end, start, rate }) => {
+                    // const baseChannel = baseChannels.find(ch => (ch.content.id === id))
                     const content = {
                       id,
                       name,
-                      channelType: baseChannel.content.channelType,
+                      channelType: channelType,
                       label: name,
-                      unit: baseChannel.content.unit,
-                      rate: baseChannel.content.rate,
-                      start: baseChannel.content.start,
-                      end: baseChannel.content.end,
+                      unit: unit,
+                      rate: rate,
+                      start: start,
+                      end: end,
                       virtualId: `${id}_${name}`
                     }
                     // ensure that channel ids are unique for montages

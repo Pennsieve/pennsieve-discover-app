@@ -33,17 +33,17 @@
             :data-id="item.id"
             @tap="onLabelTap"
           >
-            <div class="labelDiv">
+            <div class="labelDiv" :style="_cpStyleLabels">
               {{ item.label }}
             </div>
             <div
               class="chLabelIndWrap"
-              :hidden="hideLabelInfo"
+              v-if="!hideLabelInfo"
               :selected="item.selected"
             >
               <div
                 class="chLabelInd"
-                :hidden="hideLabelInfo"
+
               >
                 {{ _computeLabelInfo(item, globalZoomMult, item.rowScale) }}
               </div>
@@ -173,28 +173,26 @@
                 height: this.window_height - 110 + 'px'
               }
             },
-
-
-            _cpStyleLabels: function(height, nrVisCh) {
-              const h = Math.max(1, Math.min(12, (height)/nrVisCh-2));
-              return 'font-size:' + h + 'px; height:' + h + 'px';
-            },
             hideLabelInfo: function() {
                 let hide = false;
-                if (this.cHeight/this.nrVisChannels < 30) {
+                const nrChannels = this.nrVisChannels
+                if (this.cHeight/nrChannels < 30) {
                     hide = true;
                 }
                 return hide;
             },
             nrVisChannels: function() {
-                this.viewerChannels.reduce((accumulator, currentValue) => {
-                  if(currentValue.visible) {
-                    return accumulator + 1
-                  }
-                  return accumulator
-                }, 0)
+              return this.viewerChannels.reduce((accumulator, currentValue) => {
+                if(currentValue.visible) {
+                  return accumulator + 1
+                }
+                return accumulator
+              }, 0)
             },
-
+            _cpStyleLabels: function() {
+              const h = Math.max(1, Math.min(12, (this.window_height - 110)/this.nrVisChannels-2));
+              return 'font-size:' + h + 'px; height:' + h + 'px';
+            },
         },
         data: function () {
             return {
@@ -239,8 +237,7 @@
         },
 
         mounted: function () {
-            this.initChannels()
-            this.window_height = window.innerHeight - 144 - 80 - 48;
+            this.window_height = window.innerHeight - 144 - 100 - 48;
             this.window_width = this.$refs.ts_viewer.offsetWidth
             window.addEventListener('resize', this.onResize)
 
@@ -337,7 +334,10 @@
             onAnnLayersInitialized: function () {
                 this.$refs.scrubber.getAnnotations()
             },
-            onChannelsInitialized: function () {
+            onChannelsInitialized: function (channels) {
+
+                this.initViewerStart((channels))
+
                 // TODO: Bring back
                 this.$refs.scrubber.initSegmentSpans()
 
@@ -459,7 +459,7 @@
                     return
                 }
 
-                this.window_height = window.innerHeight - 144 - 80 - 48;
+                this.window_height = window.innerHeight - 144 - 100 - 48;
                 this.window_width = this.$refs.ts_viewer.offsetWidth
 
                 const labelDiv = this.$refs.channelLabels;
@@ -471,8 +471,8 @@
                 const n = ( ( (this.constants['DEFAULTDPI'] * window.devicePixelRatio)/(globalZoomMult * rowscale) )/25.4).toFixed(1);
                 return n+ ' ' + item.unit + '/mm'
             },
-            initChannels: function() {
-                const channels = this.activeViewer.channels
+            initViewerStart: function(channels) {
+                // const channels = this.activeViewer.channels
                 if (channels.length > 0) {
                     // Find Global start and end
                     this.ts_start = channels[0].content.start

@@ -293,8 +293,8 @@
             setGlobalZoom: function(value) {
                 this.$emit('setGlobalZoom', value)
             },
-            channelsInitialized: function() {
-                this.$emit('channelsInitialized')
+            channelsInitialized: function(channels) {
+                this.$emit('channelsInitialized', channels)
             },
             _onMouseWheel: function(e) {
                 e.stopPropagation();

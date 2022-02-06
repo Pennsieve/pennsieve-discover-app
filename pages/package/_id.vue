@@ -1,6 +1,7 @@
 <template>
   <div class="package-details">
     <bf-header :isSearchVisible="false"/>
+
     <package-details
       class="package-details-content"
       :files="packageFiles.files"
@@ -99,7 +100,6 @@ export default {
 }
 
 .package-details-content  {
-  height: 80px;
 }
 
 .pennsieve-viewer {

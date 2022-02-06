@@ -1,13 +1,39 @@
 <template>
   <div class="dataset-details">
-    <div class="discover-content container-fluid">
+    <div class="container-fluid">
+      <div class="row mb-8">
+        <div class="col-xs-12 header-link" @click="goToPrev()">
+            <svg-icon name="icon-arrow-left" class="header-link-icon" />
+            Back to dataset
+        </div>
+      </div>
+      <div class="package-content">
+        <div>
+          <h3 class="package-content-title">
+            {{headerContent}}
+          </h3>
+        </div>
+<!--        <div>-->
+<!--          <bf-button-->
+<!--            key="btn-get-dataset"-->
+<!--            class="get-dataset-button"-->
+<!--            @click="getDataset"-->
+<!--          >-->
+<!--            {{downloadContent}}-->
+<!--          </bf-button>-->
+<!--        </div>-->
+
+      </div>
       <div class="file-info">
         <div v-for="f in files">
-          <b>Name:</b><span>{{ f.name }}</span>
+          <b>Name: </b><span>{{ f.name }}</span>
         </div>
 
       </div>
-<!--      <dataset-header-->
+
+
+
+      <!--      <dataset-header-->
 <!--        :dataset-details="datasetDetails"-->
 <!--        :versions="versions"-->
 <!--        :last-updated-date="lastUpdatedDate"-->
@@ -18,7 +44,7 @@
 <!--        @update-embargo-access="$emit('update-embargo-access', $event)"-->
 <!--      />-->
     </div>
-    <div class="discover-content container-fluid">
+    <div class="container-fluid">
 <!--      <h3 class="discover-content-title">-->
 <!--        Dataset Overview-->
 <!--      </h3>-->
@@ -55,6 +81,8 @@
 
 <script>
 import marked from 'marked'
+import BfButton from '../shared/BfButton/BfButton.vue'
+
 import { compose, head, prop, propOr, last, groupBy } from 'ramda'
 
 import DateUtils from '@/mixins/format-date'
@@ -67,12 +95,17 @@ export default {
   name: 'PackageDetails',
 
   components: {
+    BfButton
 
   },
 
   mixins: [DateUtils],
 
   props: {
+    datasetId: {
+      type: Number,
+      default: 0
+    },
     files: {
       type: Array,
       default: () => []
@@ -88,6 +121,12 @@ export default {
   },
 
   computed: {
+    headerContent() {
+      return this.files.length > 1 ? "Package Files": "File Details"
+    },
+    downloadContent() {
+      return this.files.length > 1 ? "Download Package": "Download File"
+    }
 
   },
 
@@ -96,6 +135,15 @@ export default {
   },
 
   methods: {
+    goToPrev() {
+
+      // ...
+      // Do other logic like logging, etc.
+      // ...
+
+      // Tell router to go back one
+      this.$router.go(-1);
+    },
 
   },
 
@@ -196,5 +244,48 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/css/_variables.scss';
+
+.dataset-details {
+  margin-top: 24px;
+}
+
+.header-link {
+  color: $purple_1;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16px;
+
+  &:focus {
+    color: $purple_2;
+
+  }
+  &:hover {
+    text-decoration: underline;
+  }
+
+  .header-link-icon {
+    color: $purple_1;
+    height: 10px;
+    width: 10px;
+    margin-bottom: 3px;
+    margin-right: 8px;
+  }
+}
+
+.package-content {
+  display:flex;
+  flex-direction: row ;
+  justify-content: space-between;
+}
+
+.package-content-title {
+  color: $gray_4;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 40px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 
 </style>
