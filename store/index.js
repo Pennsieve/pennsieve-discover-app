@@ -8,6 +8,7 @@ export const state = () => ({
   profile: {},
   userToken: '',
   timeseriesUrl: 'wss://api.pennsieve.net/streaming/ts/query',
+  selectedPackage: {},
   config: {
     timeseriesApi: 'https://api.pennsieve.net/streaming'
   }
@@ -31,6 +32,10 @@ export const mutations = {
   CLEAR_STATE(state) {
     state.userToken = ''
     state.profile = {}
+  },
+  // Leveraged to get individual package state to package details route
+  SELECT_PACKAGAE(state, data) {
+    state.selectedPackage = data
   }
 }
 
@@ -38,7 +43,8 @@ export const mutations = {
 export const actions = {
   updateUserToken: ({ commit }, evt) => commit('UPDATE_USER_TOKEN', evt),
   updateProfile: ({ commit }, evt) => commit('UPDATE_PROFILE', evt),
-  clearState: ({ commit }) => commit('CLEAR_STATE')
+  clearState: ({ commit }) => commit('CLEAR_STATE'),
+  setSelectedPackage: ({commit}, evt) => commit('SELECT_PACKAGAE', evt)
 }
 
 // getters

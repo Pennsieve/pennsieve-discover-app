@@ -132,7 +132,7 @@
   .viewer-pane, .viewer-wrap {
     border: 1px solid $gray_3;
     border-radius:  5px  5px 0  0;
-    margin: 24px;
+    margin: 0 24px 24px 24px;
     display: flex;
     flex: 1;
     flex-direction: column;

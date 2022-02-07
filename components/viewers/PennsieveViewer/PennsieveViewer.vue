@@ -51,9 +51,15 @@
 
       <viewer-pane
         class="viewer-pane"
+        v-if="showViewer"
         ref="viewerPane"
         :pkg="activeViewer"
       />
+      <div
+        v-else
+        class="no-viewer-msg">
+        {{noViewerMsg}}
+      </div>
 
 <!--      <viewer-toolbar-->
 <!--        v-show="!hideToolbars"-->
@@ -122,6 +128,18 @@ export default {
   },
   computed: {
     ...mapState('viewer', ['activeViewer', 'viewerSidePanelOpen', 'viewerSidePanelView', 'viewerActiveTool', 'viewerErrors', 'viewerMontageScheme']),
+    ...mapState(['userToken']),
+
+    showViewer() {
+      return this.pkgType == 'TimeSeries' && this.userToken
+    },
+    noViewerMsg() {
+      if (this.pkgType == 'TimeSeries') {
+        return "Login to view data"
+      } else {
+        return "No viewer available"
+      }
+    },
     // ...mapState([
     //   'config',
     // ]),
@@ -205,11 +223,14 @@ export default {
 <style lang="scss" scoped>
   @import '../../../assets/css/_variables.scss';
 
-</style>
-<style lang="scss">
   .pennsieve-viewer {
   }
   .viewer-pane {
     background-color: white;
+  }
+  .no-viewer-msg {
+    padding-left: 2rem;
+    color: $red_2;
+    font-size: 16px;
   }
 </style>

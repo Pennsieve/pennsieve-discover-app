@@ -237,7 +237,7 @@
         },
 
         mounted: function () {
-            this.window_height = window.innerHeight - 144 - 100 - 48;
+            this.window_height = window.innerHeight - 144 - 150 - 48;
             this.window_width = this.$refs.ts_viewer.offsetWidth
             window.addEventListener('resize', this.onResize)
 
@@ -459,7 +459,7 @@
                     return
                 }
 
-                this.window_height = window.innerHeight - 144 - 100 - 48;
+                this.window_height = window.innerHeight - 144 - 150 - 48;
                 this.window_width = this.$refs.ts_viewer.offsetWidth
 
                 const labelDiv = this.$refs.channelLabels;

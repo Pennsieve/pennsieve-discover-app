@@ -18,7 +18,7 @@
 
 <script>
 import { propOr, pathOr } from 'ramda'
-
+import { mapState,mapActions } from 'vuex'
 import BfFooter from '@/components/shared/BfFooter/BfFooter.vue'
 import BfHeader from '@/components/shared/BfHeader/BfHeader.vue'
 import PackageDetails from "~/components/PackageDetails/PackageDetails";
@@ -52,17 +52,20 @@ export default {
   },
 
   props: {
+    ...mapState['selectedPackage']
   },
 
   async asyncData({ $axios, params, error, req, $cookies }) {
-    const packageFiles = await getPackageFiles(params, $axios, $cookies)
     const sourcePackage = params.id
-
+    let packageFiles = {files:[]}
     let packageType = "None"
-    if (packageFiles.files) {
-      packageType = packageFiles.files[0].packageType
-    }
+    if (params.id !== 'details') {
+      packageFiles = await getPackageFiles(params, $axios, $cookies)
 
+      if (packageFiles.files) {
+        packageType = packageFiles.files[0].packageType
+      }
+    }
 
     return {
       sourcePackage,
@@ -81,7 +84,16 @@ export default {
 
   },
 
+  mounted() {
+    this.$nextTick(function () {
+      // if (!this.selectedPackage) {
+      //   this.setSelectedPackage(this.packageFiles)
+      // }
+    })
+  },
+
   methods: {
+    ...mapActions(['setSelectedPackage'])
 
   },
 
