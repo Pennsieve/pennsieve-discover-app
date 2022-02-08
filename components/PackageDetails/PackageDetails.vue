@@ -20,14 +20,11 @@
 
       </div>
       <div class="package-content">
-        <div class="button-row">
-          <h3 class="package-content-title">
-            {{headerContent}}
-          </h3>
-          <div>
+<!--        <div class="button-row">-->
+<!--          <h3 class="package-content-title">-->
+<!--            {{headerContent}}-->
+<!--          </h3>-->
 
-          </div>
-        </div>
 
 
         <div class="file-info">
@@ -35,8 +32,10 @@
             ref="table"
             class="table"
             :data="selectedPackage.files"
-            :show-header=false
-            >
+            :highlight-current-row="false"
+            border
+            header-row-class-name="header-class"
+          >
             <el-table-column label="File Name">
               <template slot-scope="scope">
                 <div class="file-name-container">
@@ -130,6 +129,9 @@ export default {
     formatType(row) {
       return row.fileType
     },
+    formatHeader(row, index) {
+      return "background-color: red;"
+    },
     formatStorage(row, column, cellValue) {
       return this.formatMetric(cellValue)
     },
@@ -174,13 +176,33 @@ export default {
 }
 </script>
 
+<style lang="scss">
+@import '../../assets/css/_variables.scss';
+.el-table .header-class {
+  background: $gray_1;
+}
+
+.el-table th {
+  background: inherit;
+}
+</style>
+
 <style lang="scss" scoped>
 @import '../../assets/css/_variables.scss';
 
+.file-info {
+  margin-top: 24px;
+}
+.el-table--border {
+  border: 1px solid $gray_2;
+}
+
+
+
 .table {
+
   .file-name-container {
     display: flex;
-    border: 0;
 
     img {
       height: 20px;
@@ -192,6 +214,19 @@ export default {
       margin-top: 0px;
     }
   }
+}
+
+::v-deep .el-table {
+  .el-table--border {
+    border:none
+  }
+  .el-table__header-wrapper {
+    height: 40px;
+
+    .el-table__header {
+    }
+  }
+
 }
 
 .dataset-details {
