@@ -34,9 +34,7 @@
         prop
     } from 'ramda'
 
-    import "./lib/long.min.js"
-    import "./lib/ByteBufferAB.min.js"
-    import "./lib/protobuf.min.js"
+    import protobuf from 'protobufjs';
 
     export default {
         name: 'TimeseriesPlotCanvas',
@@ -313,11 +311,11 @@
                 }
             }
 
-            const protobuf = self.protobuf.Root.fromJSON(this.proto)
-            this.segment = protobuf.Segment;
-            this.timeSeriesMessage = protobuf.TimeSeriesMessage
-            this.timeSeriesError = protobuf.TimeSeriesError
-            this.channelsList = protobuf.ChannelsList
+            const protobufInstance = protobuf.Root.fromJSON(this.proto)
+            this.segment = protobufInstance.Segment;
+            this.timeSeriesMessage = protobufInstance.TimeSeriesMessage
+            this.timeSeriesError = protobufInstance.TimeSeriesError
+            this.channelsList = protobufInstance.ChannelsList
 
             this.requestedPages = new Map();
             this.openWebsocket()
@@ -525,8 +523,8 @@
                     if (pred === -1) {
                         return pred;
                     }
-                    const predVal = segmArray[pred].pageStart.toNumber();
-                    while (pred >= 0 && segmArray[pred].pageStart.toNumber() === predVal) {
+                    const predVal = segmArray[pred].pageStart;
+                    while (pred >= 0 && segmArray[pred].pageStart === predVal) {
                         pred--;
                     }
                     pred++;
@@ -535,19 +533,19 @@
 
                 const mid = parseInt((min + max) / 2);
 
-                if (segmArray[mid].pageStart.toNumber() > val) {
+                if (segmArray[mid].pageStart > val) {
                     return this._indexOfStart(segmArray, val, min, mid - 1, firstIndex);
-                } else if (segmArray[mid].pageStart.toNumber() < val) {
+                } else if (segmArray[mid].pageStart < val) {
                     return this._indexOfStart(segmArray, val, mid + 1, max, firstIndex);
                 } else {
                     let index = mid;
                     if (firstIndex) {
-                        while (index >= 0 && segmArray[index].pageStart.toNumber() === val) {
+                        while (index >= 0 && segmArray[index].pageStart === val) {
                             index--;
                         }
                         index++;
                     } else {
-                        while (index < segmArray.length && segmArray[index].pageStart.toNumber() === val) {
+                        while (index < segmArray.length && segmArray[index].pageStart === val) {
                             index++;
                         }
                         index--;
@@ -719,7 +717,7 @@
 
                             segmOffset += 1;
                             //curTime = curSegm.startTs + curSegm.nrPoints*curSegm.samplePeriod;
-                            curTime = curSegm.pageEnd.toNumber();
+                            curTime = curSegm.pageEnd;
 
                             // Only add to viewData if segment is not a prefetch page
                             if (isViewPage) {
@@ -1038,7 +1036,7 @@
                             let startIndex = Math.floor((this.start - curSeg.startTs ) / curSeg.samplePeriod);
                             curSeg.renderStartIndex = ((startIndex > 0) ? startIndex : 0)
 
-                            let endIndex = Math.floor( ((this.start + this.duration) - curSeg.startTs.add(curSeg.nrPoints*curSeg.samplePeriod))/curSeg.samplePeriod );
+                            let endIndex = Math.floor( ((this.start + this.duration) - (curSeg.startTs + (curSeg.nrPoints*curSeg.samplePeriod))/curSeg.samplePeriod ));
                             curSeg.renderEndIndex = endIndex >= 0 ? (curSeg.nrPoints-1) : (curSeg.nrPoints + endIndex);
 
                             // console.log('start: ' + this.start + "   duration: " + this.duration)
@@ -1632,7 +1630,7 @@
                         for (let i = 0; i < nrVal; i++) {
                           let curY = -segment.data[curI];
                           let curY2 = -segment.data[curI + 1];
-                          parsedData[0][i] = startTs.add(i * segment.samplePeriod);
+                          parsedData[0][i] = startTs + (i * segment.samplePeriod);
                           parsedData[1][i] = curY;
                           parsedData[2][i] = curY2;
                           if (!isNaN(curY)) {
@@ -1647,7 +1645,7 @@
                         //its just one big list of values
                           for (let i = 0; i < nrVal; i++) {
                               let curY = -segment.data[i];
-                              parsedData[0][i] = startTs.add(i * segment.samplePeriod);
+                              parsedData[0][i] = startTs + (i * segment.samplePeriod);
                               parsedData[1][i] = curY;
                               if (!isNaN(curY)) {
                                   nrValidPoints++;
@@ -1777,11 +1775,11 @@
                     if (curSegments && obj.type !== 'gap') {
                         addData = true;
                         if (curSegments.length > 0) {
-                            let fIndex = this.segmIndexOf(curSegments, obj.data.startTs.toNumber(), true, 0);
+                            let fIndex = this.segmIndexOf(curSegments, obj.data.startTs, true, 0);
 
                             // Iterate over all segments in CHData with same pageStart to see if page is already present
-                            while( curSegments[fIndex] && curSegments[fIndex].pageStart.toNumber() === obj.data.pageStart.toNumber()) {
-                                if (curSegments[fIndex].startTs.toNumber() === obj.data.startTs.toNumber()) {
+                            while( curSegments[fIndex] && curSegments[fIndex].pageStart === obj.data.pageStart) {
+                                if (curSegments[fIndex].startTs === obj.data.startTs) {
                                     addData = false;
                                     break;
                                 }
@@ -1791,7 +1789,7 @@
                     }
 
                     // Remove returned page from the list of requested Pages.
-                    let requestedPage = this.requestedPages.get(obj.data.pageStart.toNumber());
+                    let requestedPage = this.requestedPages.get(obj.data.pageStart);
                     // array or page IDs (timestamp, based on viewport)
                         // array of channel IDs
                     if (requestedPage) {
@@ -1818,7 +1816,7 @@
                                 }
                             }
                             if (isComplete) {
-                                this.requestedPages.delete(obj.data.pageStart.toNumber());
+                                this.requestedPages.delete(obj.data.pageStart);
                                 // console.log('isComplete')
                             }
 
@@ -1832,13 +1830,13 @@
 
                         // Resort segments in each channel afer adding data
                         curSegments.sort(function Comparator(a, b) {
-                            if (a.startTs.toNumber() < b.startTs.toNumber()) return -1;
-                            if (a.startTs.toNumber() > b.startTs.toNumber()) return 1;
+                            if (a.startTs < b.startTs) return -1;
+                            if (a.startTs > b.startTs) return 1;
                             return 0;
                         });
 
                         // Check if returned page falls in viewport
-                        if (obj.pageStart.toNumber() < (this.start + this.duration)) {
+                        if (obj.pageStart < (this.start + this.duration)) {
                             this.throttledGetRenderData();
                         }
                     }
