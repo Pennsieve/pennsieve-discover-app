@@ -1,26 +1,33 @@
 <template>
   <div class="bf-header">
     <div class="logo-wrap">
-      <button id="btn-home">
-        <nuxt-link
-          :to="{
-            name: 'index'
-          }"
-        >
-          <svg-icon name="pennsieve-logo" width="35" height="35" color="#fff" />
-        </nuxt-link>
-      </button>
-      <nuxt-link
-        v-if="!isSearchVisible"
-        :to="{
-          name: 'index'
-        }"
-        class="header-title"
+      <img
+        src="../../../assets/images/pennsieve-logo-white.svg"
+        class="logo"
       >
-        <span class="blackfynn-title">Pennsieve</span>
-        <span class="discover-title">Discover</span>
-      </nuxt-link>
     </div>
+    <span class="discover-title">Discover</span>
+<!--    <div class="logo-wrap">-->
+<!--      <button id="btn-home">-->
+<!--        <nuxt-link-->
+<!--          :to="{-->
+<!--            name: 'index'-->
+<!--          }"-->
+<!--        >-->
+<!--          <svg-icon name="pennsieve-logo" width="35" height="35" color="#fff" />-->
+<!--        </nuxt-link>-->
+<!--      </button>-->
+<!--      <nuxt-link-->
+<!--        v-if="!isSearchVisible"-->
+<!--        :to="{-->
+<!--          name: 'index'-->
+<!--        }"-->
+<!--        class="header-title"-->
+<!--      >-->
+<!--        <span class="blackfynn-title">Pennsieve</span>-->
+<!--        <span class="discover-title">Discover</span>-->
+<!--      </nuxt-link>-->
+<!--    </div>-->
 
     <div
       v-if="isSearchVisible"
@@ -194,10 +201,185 @@ export default {
   box-sizing: border-box;
   display: flex;
   height: 64px;
-  background-color: $dopamine-dark;
+  background-color: $purple_2;
   padding-right: 20px;
   position: relative;
   width: 100%;
+}
+
+.not-logged-in {
+  background: $gray_1;
+  display: block;
+
+  .login-wrapper {
+    background: $white;
+    box-sizing: border-box;
+    color: $gray_4;
+    max-width: 720px;
+    min-height: 100vh;
+    padding-bottom: 20px;
+    padding-top: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .login-inner {
+    background: $white;
+    box-sizing: border-box;
+    color: $gray_4;
+    max-width: 720px;
+    flex: 1;
+    width: 360px;
+  }
+
+  .login-header {
+    margin-bottom: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .logo {
+    display: block;
+    height: 35px;
+    width: 198px;
+  }
+
+  .password {
+    margin-bottom: 32px;
+  }
+
+  .forgot-password,
+  .token-cancel {
+    margin-left: 16px;
+  }
+
+  .sign-up {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 30px;
+  }
+
+  .sign-in,
+  .forgot-password {
+    width: 50%;
+  }
+
+  .forgot-password {
+    text-align: center;
+  }
+
+  .button-spinner {
+    height: 20px;
+    margin: -3px 8px -3px 0;
+    width: 20px;
+  }
+
+  .signin-form-item {
+    .el-form-item__content {
+      display: flex;
+    }
+  }
+
+  .centered-spaced {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 30px;
+  }
+  .orcid-error-text {
+    color: #fcb603;
+  }
+}
+//.not-logged-in {
+//  background: $gray_1;
+//  display: block;
+//
+//  .login-wrapper {
+//    background: $white;
+//    box-sizing: border-box;
+//    color: $gray_4;
+//    max-width: 720px;
+//    min-height: 100vh;
+//    padding-bottom: 20px;
+//    padding-top: 130px;
+//    display: flex;
+//    flex-direction: column;
+//    align-items: center;
+//  }
+//
+//  .login-inner {
+//    background: $white;
+//    box-sizing: border-box;
+//    color: $gray_4;
+//    max-width: 720px;
+//    flex: 1;
+//    width: 360px;
+//  }
+//
+//  .login-header {
+//    margin-bottom: 60px;
+//    display: flex;
+//    flex-direction: row;
+//    justify-content: center;
+//  }
+//
+//  .logo {
+//    display: block;
+//    height: 35px;
+//    width: 198px;
+//  }
+//
+//  .password {
+//    margin-bottom: 32px;
+//  }
+//
+//  .forgot-password,
+//  .token-cancel {
+//    margin-left: 16px;
+//  }
+//
+//  .sign-up {
+//    text-align: center;
+//    margin-bottom: 20px;
+//    margin-top: 30px;
+//  }
+//
+//  .sign-in,
+//  .forgot-password {
+//    width: 50%;
+//  }
+//
+//  .forgot-password {
+//    text-align: center;
+//  }
+//
+//  .button-spinner {
+//    height: 20px;
+//    margin: -3px 8px -3px 0;
+//    width: 20px;
+//  }
+//
+//  .signin-form-item {
+//    .el-form-item__content {
+//      display: flex;
+//    }
+//  }
+//
+//  .centered-spaced {
+//    text-align: center;
+//    margin-bottom: 20px;
+//    margin-top: 30px;
+//  }
+//  .orcid-error-text {
+//    color: #fcb603;
+//  }
+//}
+
+.logo {
+  display: block;
+  height: 35px;
+  width: 198px;
 }
 .logo-wrap {
   align-items: center;
@@ -207,7 +389,7 @@ export default {
 #btn-home {
   height: 64px;
   width: 64px;
-  background-color: $dopamine-dark;
+  background-color: $purple_2;
 }
 .header-title {
   color: #ffffff;
@@ -242,14 +424,17 @@ export default {
   font-weight: 500;
   margin-right: 3px;
 }
+
 .discover-title {
   font-family: 'SharpSansLight';
   font-weight: 100;
+  color: white;
+  font-size: 18px;
 }
 
 .dataset-search {
   @media (max-width: 48em) {
-    background: $dark-blue;
+    background: $purple_2;
     box-sizing: border-box;
     flex: 1;
     margin: 0;

@@ -8,6 +8,7 @@ export NPM_CONFIG_PRODUCTION=false
 export PENNSIEVE_API_HOST=https://api.pennsieve.net
 export PENNSIEVE_DISCOVER_API_HOST=https://api.pennsieve.net/discover
 export PENNSIEVE_ZIPIT_HOST=https://api.pennsieve.net/zipit/discover
+export PENNSIEVE_STREAMING=wss://api.pennsieve.net/streaming/discover/ts/query
 export REGION=us-east-1
 export SITE_URL=https://discover.pennsieve.net
 export USER_POOL_ID=us-east-1_FVLhJ7CQA
