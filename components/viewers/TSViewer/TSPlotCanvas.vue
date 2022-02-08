@@ -17,17 +17,12 @@
 </template>
 <script>
     import {
-        mapActions,
-        mapGetters,
         mapState
     } from 'vuex'
 
     import {
         compose,
-        defaultTo,
-        find,
         head,
-        pathOr,
         propEq,
         propOr,
         path,
@@ -75,8 +70,10 @@
             ]),
             ...mapState([
               'userToken',
-              'timeseriesUrl'
             ]),
+            streamingUrl() {
+              return `${process.env.ts_streaming_host}`
+            },
             canvasStyle: function() {
                 return {
                     width: this.cWidth  + 'px',
@@ -87,9 +84,8 @@
                 return this.cHeight - 20
             },
             timeSeriesUrl: function() {
-                // const url = discoverUrl
                 const token = this.userToken
-                return this.timeseriesUrl + '?session=' + token + '&package=' + this.activeViewer.package
+                return this.streamingUrl + '?session=' + token + '&package=' + this.activeViewer.package
             },
         },
         data: function () {

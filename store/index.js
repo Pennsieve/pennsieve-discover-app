@@ -7,11 +7,7 @@ export const state = () => ({
   isLoadingTags: true,
   profile: {},
   userToken: '',
-  timeseriesUrl: 'wss://api.pennsieve.net/streaming/ts/query',
   selectedPackage: {},
-  config: {
-    timeseriesApi: 'https://api.pennsieve.net/streaming'
-  }
 })
 
 // mutations

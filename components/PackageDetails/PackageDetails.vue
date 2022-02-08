@@ -1,11 +1,23 @@
 <template>
   <div class="dataset-details">
     <div class="container-fluid">
-      <div class="row mb-8">
-        <div class="col-xs-12 header-link" @click="goToPrev()">
+      <div class="row between-mb">
+        <div class="col-xs-8 header-link">
+          <nuxt-link :to="{ name: 'datasets-id', params: { id: this.selectedPackage.datasetId } }">
             <svg-icon name="icon-arrow-left" class="header-link-icon" />
             Back to dataset
+          </nuxt-link>
         </div>
+        <div class="col-xs row end-xs">
+          <bf-button
+            key="btn-get-dataset"
+            class="get-dataset-button"
+            @click="onDownloadClick"
+          >
+            {{downloadContent}}
+          </bf-button>
+        </div>
+
       </div>
       <div class="package-content">
         <div class="button-row">
@@ -13,21 +25,33 @@
             {{headerContent}}
           </h3>
           <div>
-            <bf-button
-              key="btn-get-dataset"
-              class="get-dataset-button"
-              @click="onDownloadClick"
-            >
-              {{downloadContent}}
-            </bf-button>
+
           </div>
         </div>
 
 
         <div class="file-info">
-          <div v-for="f in files">
-            <b>Name: </b><span>{{ f.name }}</span>
-          </div>
+          <el-table
+            ref="table"
+            class="table"
+            :data="selectedPackage.files"
+            :show-header=false
+            >
+            <el-table-column label="File Name">
+              <template slot-scope="scope">
+                <div class="file-name-container">
+                  <img :src="fileIcon(scope.row.icon, scope.row.type)" alt="Icon" />
+                  <div class="name">
+                      {{ scope.row.name }}
+                  </div>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column :formatter="formatType" label="Type" />
+            <el-table-column prop="size" label="Size" :formatter="formatStorage" />
+            <el-table-column prop="uri" label="URI" min-width="200px" align="right"/>
+
+          </el-table>
         </div>
 
         <h3 class="package-content-title">
@@ -50,6 +74,9 @@ import { compose, head, prop, propOr, last, groupBy } from 'ramda'
 
 import DateUtils from '@/mixins/format-date'
 import {mapState} from "vuex";
+import FormatStorage from "~/mixins/bf-storage-metrics";
+import FileIcon from "~/mixins/file-icon";
+import Request from "~/mixins/request";
 
 marked.setOptions({
   sanitize: true
@@ -62,18 +89,9 @@ export default {
     BfButton
 
   },
-
-  mixins: [DateUtils],
+  mixins: [FormatStorage, FileIcon, DateUtils],
 
   props: {
-    datasetId: {
-      type: Number,
-      default: 0
-    },
-    files: {
-      type: Array,
-      default: () => []
-    },
 
   },
 
@@ -87,15 +105,16 @@ export default {
     ...mapState(['selectedPackage', 'userToken']),
 
     headerContent() {
-      return this.files.length > 1 ? "Package Files": "File Details"
+      const files = propOr(this.selectedPackage,'files',[])
+      return files.length > 1 ? "Package Files": "File Details"
     },
     downloadContent() {
-      return this.files.length > 1 ? "Download Package": "Download File"
+      const files = propOr(this.selectedPackage,'files',[])
+      return files.length > 1 ? "Download Package": "Download File"
     },
     zipitUrl() {
       return `${process.env.zipit_host}`
     },
-
   },
 
   watch: {
@@ -103,40 +122,34 @@ export default {
   },
 
   methods: {
-    goToPrev() {
-      // Tell router to go back one
-      this.$router.go(-1);
+    /**
+     * Formats file/folder type for table
+     * @param {Object} row
+     * @returns {String}
+     */
+    formatType(row) {
+      return row.fileType
     },
-
+    formatStorage(row, column, cellValue) {
+      return this.formatMetric(cellValue)
+    },
+    sizeString(sizeInBytes) {
+      return this.formatMetric(sizeInBytes)
+    },
     onDownloadClick() {
       this.executeDownload()
-      // if (this.shouldConfirmDownload) {
-      //   this.showReduceSize = this.downloadDisabled
-      //   this.confirmDownloadVisible = true
-      // } else {
-      //   this.executeDownload()
-      // }
-    },
-
-    confirmDownload() {
-      this.downloadConfirmed = true
-      this.onDownloadClick()
     },
 
     executeDownload() {
       const mainPayload = {
-        // paths: this.selectedPackage.fmap((f) => {
-        //   const expr = /(s3:\/\/[a-z-1]+\/[0-9]+\/[0-9]+\/)(.*)/
-        //   const match = f.uri.match(expr)
-        //   return match[2]
-        // }),
-        paths: [this.selectedPackage.package.path],
+        paths: this.selectedPackage.files.map((f) => {
+          return f.path
+        }),
         datasetId: this.selectedPackage.datasetId,
         version: this.selectedPackage.version,
         userToken: this.userToken
       }
 
-      // const [, ...path] = this.filePath
       const rootPathPayload = {} // path ? { rootPath: path.join('/') } : {}
       const archiveNamePayload =
         this.archiveName && this.selected.length > 1
@@ -163,6 +176,23 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/css/_variables.scss';
+
+.table {
+  .file-name-container {
+    display: flex;
+    border: 0;
+
+    img {
+      height: 20px;
+      width: 20px;
+      margin: 2px 5px 0px 0px;
+    }
+
+    .name {
+      margin-top: 0px;
+    }
+  }
+}
 
 .dataset-details {
   margin-top: 24px;

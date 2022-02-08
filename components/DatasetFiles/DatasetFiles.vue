@@ -337,7 +337,7 @@ export default {
     },
 
     setPackage(data) {
-      this.setSelectedPackage({datasetId: this.datasetId, version: this.version, package: data})
+      this.setSelectedPackage({datasetId: this.datasetId, version: this.version, files: [data]})
     },
     /**
      * Formats file/folder type for table

@@ -4,7 +4,6 @@
 
     <package-details
       class="package-details-content"
-      :files="packageFiles.files"
     />
     <pennsieve-viewer
       class="pennsieve-viewer"
@@ -86,9 +85,17 @@ export default {
 
   mounted() {
     this.$nextTick(function () {
-      // if (!this.selectedPackage) {
-      //   this.setSelectedPackage(this.packageFiles)
-      // }
+      if (this.packageFiles.files.length > 0) {
+        // Get DatasetId and version from first file in package
+        const expr = /s3:\/\/[a-z-1]+\/([0-9]+)\/([0-9]+)\/(.*)/
+        const match = this.packageFiles.files[0].uri.match(expr)
+        const datasetId = match[1]
+        const version = match[2]
+        this.setSelectedPackage({
+          datasetId: datasetId,
+          version: version,
+          files: this.packageFiles.files})
+      }
     })
   },
 
