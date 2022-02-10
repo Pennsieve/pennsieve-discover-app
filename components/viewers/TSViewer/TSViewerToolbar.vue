@@ -57,18 +57,18 @@
             width="12"/>
         </button>
       </el-tooltip>
-      <el-tooltip
-        placement="top-end"
-        content="Previous Annotation">
-        <button
-          class="btn-icon"
-          @click="previousAnnotation()">
-          <svg-icon
-            name="next-annotation-left-facing"
-            height="12"
-            width="18"/>
-        </button>
-      </el-tooltip>
+<!--      <el-tooltip-->
+<!--        placement="top-end"-->
+<!--        content="Previous Annotation">-->
+<!--        <button-->
+<!--          class="btn-icon"-->
+<!--          @click="previousAnnotation()">-->
+<!--          <svg-icon-->
+<!--            name="next-annotation-left-facing"-->
+<!--            height="12"-->
+<!--            width="18"/>-->
+<!--        </button>-->
+<!--      </el-tooltip>-->
       <el-tooltip
         placement="top-end"
         content="Automatic Forward">
@@ -81,18 +81,18 @@
             width="18"/>
         </button>
       </el-tooltip>
-      <el-tooltip
-        placement="top-end"
-        content="Next Annotation">
-        <button
-          class="btn-icon"
-          @click="nextAnnotation()">
-          <svg-icon
-            name="next-annotation-right-facing"
-            height="12"
-            width="18"/>
-        </button>
-      </el-tooltip>
+<!--      <el-tooltip-->
+<!--        placement="top-end"-->
+<!--        content="Next Annotation">-->
+<!--        <button-->
+<!--          class="btn-icon"-->
+<!--          @click="nextAnnotation()">-->
+<!--          <svg-icon-->
+<!--            name="next-annotation-right-facing"-->
+<!--            height="12"-->
+<!--            width="18"/>-->
+<!--        </button>-->
+<!--      </el-tooltip>-->
       <el-tooltip
         placement="top-end"
         content="Next Page">
