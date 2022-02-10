@@ -351,20 +351,22 @@
               //TODO: Update logic to track gap over all channels
 
               let setStart = this.start - (3*this.duration)/4
-              let channelOneSegments = this.viewerChannels[0].dataSegments
 
-              let i = 0;
-              for(let segment in channelOneSegments) {
-                if (channelOneSegments[segment] > setStart) {
-                  break
-                }
-                i++
-              }
-
-              // If new page completely in gap --> set start to next timestamp with data
-              if(i % 2 == 0) {
-                setStart = channelOneSegments[i-1] - 0.5*this.duration
-              }
+              //TODO: Bring back when we have segment sections information
+              // let channelOneSegments = this.viewerChannels[0].dataSegments
+              //
+              // let i = 0;
+              // for(let segment in channelOneSegments) {
+              //   if (channelOneSegments[segment] > setStart) {
+              //     break
+              //   }
+              //   i++
+              // }
+              //
+              // // If new page completely in gap --> set start to next timestamp with data
+              // if(i % 2 == 0) {
+              //   setStart = channelOneSegments[i-1] - 0.5*this.duration
+              // }
 
               this.start = setStart
             },
@@ -372,20 +374,22 @@
 
                 //TODO: Update logic to track gap over all channels
                 let setStart = this.start + (3*this.duration)/4
-                let channelOneSegments = this.viewerChannels[0].dataSegments
 
-                let i = 0;
-                for(let segment in channelOneSegments) {
-                  if (channelOneSegments[segment] > setStart) {
-                    break
-                  }
-                  i++
-                }
-
-                // If new page completely in gap --> set start to next timestamp with data
-                if(i % 2 == 0) {
-                  setStart = channelOneSegments[i] - 0.5*this.duration
-                }
+                //TODO: Bring back when we have segment sections information
+                // let channelOneSegments = this.viewerChannels[0].dataSegments
+                //
+                // let i = 0;
+                // for(let segment in channelOneSegments) {
+                //   if (channelOneSegments[segment] > setStart) {
+                //     break
+                //   }
+                //   i++
+                // }
+                //
+                // // If new page completely in gap --> set start to next timestamp with data
+                // if(i % 2 == 0) {
+                //   setStart = channelOneSegments[i] - 0.5*this.duration
+                // }
 
                 this.start = setStart
             },

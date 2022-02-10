@@ -33,9 +33,32 @@ const initialState = () => ({
   viewerMontageScheme: 'NOT_MONTAGED'
 })
 
-export const state = initialState()
+export const state =() => ({
+  activeViewer: {},
+  viewerSidePanelOpen: false,
+  viewerSlideInfo: {
+    curRotation: 0,
+    curZoom: 0,
+    isMeasuring: false,
+    measureLength: 0,
+    zoomPerClick: 0,
+    minZoom: 0,
+    maxZoom: 0
+  },
+  viewerChannels: [],
+  viewerAnnotations: [],
+  activeAnnotationLayer: {},
+  activeAnnotation: {},
+  viewerErrors: {},
+
+  //TODO make strings enum constants
+  viewerSidePanelView: viewerSidePanelTypes.INFO_PANEL,
+  viewerActiveTool: viewerToolTypes.PAN,
+  viewerMontageScheme: 'NOT_MONTAGED'
+})
 
 export const mutations = {
+
   //TODO figure out why we clear state twice?
   CLEAR_STATE(state) {
     //reset all state to initial state
