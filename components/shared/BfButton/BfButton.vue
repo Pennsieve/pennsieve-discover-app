@@ -101,7 +101,7 @@ export default {
   &:not([disabled]) {
     &:hover,
     &:focus {
-      background: $dopamine-dark;
+      background: $purple_2;
     }
     &:hover {
       box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
@@ -127,17 +127,17 @@ export default {
     min-width: 0;
   }
   &.secondary {
-    background: $dendrite;
-    border-color: #d3d5da;
+    background: $gray_1;
+    border-color: $gray_2;
     color: $text-color;
     &:not([disabled]) {
       &:hover,
       &:focus {
-        background: $dendrite-dark;
+        background: $purple_tint;
       }
     }
     &.ghost {
-      border-color: $cortex;
+      border-color: $gray_1;
       color: $text-color;
       &:not([disabled]) {
         &:active,
@@ -149,40 +149,40 @@ export default {
     }
   }
   &.green {
-    background: $nucleus;
+    background: $green_1;
     &:not([disabled]) {
       &:hover,
       &:focus {
-        background: $nucleus-dark;
+        background: $green_2;
       }
     }
     &.ghost {
-      border-color: $nucleus;
-      color: $nucleus;
+      border-color: $green_1;
+      color: $green_1;
       &:not([disabled]) {
         &:active,
         &:focus {
-          background: $nucleus;
+          background: $green_1;
           color: white;
         }
       }
     }
   }
   &.red {
-    background: $synapse;
+    background: $red_1;
     &:not([disabled]) {
       &:hover,
       &:focus {
-        background: $synapse-dark;
+        background: $red_2;
       }
     }
     &.ghost {
-      border-color: $synapse;
-      color: $synapse;
+      border-color: $red_1;
+      color: $red_1;
       &:not([disabled]) {
         &:active,
         &:focus {
-          background: $synapse;
+          background: $red_1;
           color: white;
         }
       }

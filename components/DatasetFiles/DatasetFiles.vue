@@ -66,8 +66,10 @@
                 {{ scope.row.name }}
               </a>
             </div>
-            <div v-else class="name">
-              {{ scope.row.name }}
+            <div v-else class="name" @click="setPackage(scope.row)">
+              <nuxt-link :to="getRouteParams(scope.row)">
+                {{ scope.row.name }}
+              </nuxt-link>
             </div>
           </div>
         </template>
@@ -154,7 +156,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import DatasetFilesFooter from '../DatasetFilesFooter/DatasetFilesFooter.vue'
 import DatasetFilesHeader from '../DatasetFilesHeader/DatasetFilesHeader.vue'
 import BfButton from '../shared/BfButton/BfButton.vue'
@@ -327,6 +329,16 @@ export default {
   },
 
   methods: {
+    ...mapActions(['setSelectedPackage']),
+
+    getRouteParams(data) {
+      const  sourcePackageId  = data.sourcePackageId ? data.sourcePackageId : "details"
+      return { name: 'package-id', params: { id: sourcePackageId } }
+    },
+
+    setPackage(data) {
+      this.setSelectedPackage({datasetId: this.datasetId, version: this.version, files: [data]})
+    },
     /**
      * Formats file/folder type for table
      * @param {Object} row
@@ -433,7 +445,8 @@ export default {
           return match[2]
         }),
         datasetId: this.datasetId,
-        version: this.version
+        version: this.version,
+        userToken: this.userToken
       }
 
       const [, ...path] = this.filePath

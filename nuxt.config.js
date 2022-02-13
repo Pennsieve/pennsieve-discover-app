@@ -47,6 +47,9 @@ export default {
     zipit_host:
       process.env.PENNSIEVE_ZIPIT_HOST ||
       'https://api.pennsieve.io/zipit/discover',
+    ts_streaming_host:
+      process.env.PENNSIEVE_STREAMING ||
+      'wss://api.pennsieve.io/streaming/discover/ts/query',
     max_download_size: parseInt(process.env.MAX_DOWNLOAD_SIZE || '5000000000'),
     googleTagManager: process.env.PENNSIEVE_DISCOVER_GOOGLE_TAG_MANAGER || '',
     siteUrl: process.env.SITE_URL || 'https://localhost:3000',
@@ -56,7 +59,7 @@ export default {
     userPoolWebClientId:
       process.env.USER_POOL_WEB_CLIENT_ID || '703lm5d8odccu21pagcfjkeaea',
     authenticationFlowType:
-      process.env.AUTHENTICATION_FLOW_TYPE || 'USER_PASSWORD_AUTH',
+      process.env.AUTHENTICATION_FLOW_TYPE || 'USER_PASSWORD_AUTH'
   },
   /*
    ** Customize the progress-bar color
@@ -78,7 +81,7 @@ export default {
    */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
+    // '@nuxtjs/eslint-module',
     '@nuxtjs/gtm'
   ],
   /*
