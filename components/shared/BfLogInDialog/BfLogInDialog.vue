@@ -28,13 +28,15 @@
             @submit.native.prevent="onFormSubmit('logInForm')"
           >
             <el-form-item prop="email">
-              <el-input v-model="logInForm.email" placeholder="Email Address" />
+              <el-input ref="emailField" v-model="logInForm.email" placeholder="Email Address" @keyup.enter.native="onEnter"/>
             </el-form-item>
             <el-form-item prop="password">
               <el-input
+                ref="pwdField"
                 v-model="logInForm.password"
                 type="password"
                 placeholder="Password"
+                @keyup.enter.native="onEnter"
               />
             </el-form-item>
             <el-form-item>
@@ -335,6 +337,14 @@ export default {
 
   methods: {
     ...mapActions(['updateUserToken', 'updateProfile']),
+
+    onEnter(event) {
+      if (event.currentTarget.__vue__ === this.$refs.pwdField) {
+        this.onFormSubmit('logInForm')
+      } else {
+        this.$refs.pwdField.focus()
+      }
+    },
 
     /**
      * Reset all values and validation for
