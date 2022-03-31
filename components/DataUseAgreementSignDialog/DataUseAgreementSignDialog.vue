@@ -58,7 +58,7 @@ import BfDialogHeader from '@/components/shared/BfDialogHeader/BfDialogHeader.vu
 import marked from 'marked'
 
 marked.setOptions({
-  sanitize: true
+  gfm: true
 })
 
 export default {
@@ -153,26 +153,29 @@ export default {
     replaceAllSlashEscapedSequences(sourceString){
       var result = ''
       var remaining = sourceString
-      var cutPoint = 0
 
-      var index = remaining.indexOf("\\")
-      while (index >= 0){
-        var nextChar = remaining[index+1]
-        var append = ''
-        if (nextChar === 'n') {
-          append = '\n'
-        } else if (nextChar === 't') {
-          append = '\t'
+      if (remaining) {
+        var cutPoint = 0
+        var index = remaining.indexOf("\\")
+        while (index >= 0){
+          var nextChar = remaining[index+1]
+          var append = ''
+          if (nextChar === 'n') {
+            append = '\n'
+          } else if (nextChar === 't') {
+            append = '\t'
+          }
+          var slice = remaining.slice(cutPoint,index)
+          result = result.concat(slice)
+          result = result.concat(append)
+          remaining = remaining.slice(index+2)
+          index = remaining.indexOf("\\")
         }
-        var slice = remaining.slice(cutPoint,index)
-        result = result.concat(slice)
-        result = result.concat(append)
-        remaining = remaining.slice(index+2)
-        index = remaining.indexOf("\\")
+        if (remaining.length > 0) {
+          result = result.concat(remaining)
+        }
       }
-      if (remaining.length > 0) {
-        result = result.concat(remaining)
-      }
+
       return result
     }
   }
