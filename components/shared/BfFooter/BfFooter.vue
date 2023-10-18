@@ -32,7 +32,15 @@
     <div class="footer-container">
       <div class="container-fluid discover-content">
         <div class="row">
-          <div class="col-xs-12">
+          <div class="col-xs-3 nih-logo">
+            <img
+              src="~/assets/images/NIH-logo.png"
+              alt="NIH Logo"
+              width="150"
+              height="150"
+            />
+          </div>
+          <div class="col-xs-1 align-items-center pennsieve-logo-container">
             <svg-icon
               class="mb-16"
               name="pennsieve-logo"
@@ -40,27 +48,31 @@
               height="35"
               color="#fff"
             />
-            <p class="mb-8">
-              Copyright &copy; {{ copyrightYear }} University of Pennsylvania.
-              All rights reserved.
-            </p>
-            <ul class="footer-text footer-links unstyled">
-              <li>
-                <a href="https://www.blackfynn.com/terms" target="_blank">
-                  Terms of Service
-                </a>
-              </li>
-              <li>
-                <a href="https://www.blackfynn.com/privacy" target="_blank">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="https://docs.pennsieve.io/" target="_blank">
-                  Documentation Hub
-                </a>
-              </li>
-            </ul>
+          </div>
+          <div class="col-xs-6 align-items-center footer-text-container">
+            <div>
+              <p class="mb-8 align-items-center">
+                Copyright &copy; {{ copyrightYear }} University of Pennsylvania.
+                All rights reserved.
+              </p>
+              <ul class="footer-text footer-links unstyled">
+                <li>
+                  <a href="https://www.blackfynn.com/terms" target="_blank">
+                    Terms of Service
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.blackfynn.com/privacy" target="_blank">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="https://docs.pennsieve.io/" target="_blank">
+                    Documentation Hub
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -99,6 +111,19 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../../assets/css/_variables.scss';
+
+.footer-text-container {
+  margin-top: -20px;
+}
+
+.pennsieve-logo-container {
+  margin-right: -30px;
+}
+
+.align-items-center {
+  display: flex;
+  align-items: center;
+}
 
 .bf-footer {
   display: block;
