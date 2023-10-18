@@ -32,7 +32,7 @@
     <div class="footer-container">
       <div class="container-fluid discover-content">
         <div class="row">
-          <div class="col-xs-3 nih-logo">
+          <div class="col-xs-3">
             <img
               src="~/assets/images/NIH-logo.png"
               alt="NIH Logo"
