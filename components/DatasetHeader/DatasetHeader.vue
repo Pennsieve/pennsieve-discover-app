@@ -165,6 +165,7 @@
     <download-dataset
       :visible.sync="isDownloadModalVisible"
       :dataset-details="datasetDetails"
+      :versions="versions"
       :download-size="getDownloadSize"
       @close-download-dialog="isDownloadModalVisible = false"
     />
