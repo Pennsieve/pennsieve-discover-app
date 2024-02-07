@@ -1,28 +1,31 @@
 <template>
   <el-dialog
-    :visible.sync="visible"
+    :visible="visible"
     class=""
     :show-close="false"
     @close="closeDialog"
-    >I am the modal, the mighty mighty modal</el-dialog
   >
+    <bf-dialog-header slot="title" title="Rehydration Request" />
+    <div class="rehydration-modal-container">
+      <div v-if="isUserAuthenticated">
+        Only see this if the user is authenticated
+      </div>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
-import { compose, head, propOr } from 'ramda'
-
+import { mapState } from 'vuex'
 import BfButton from '../shared/BfButton/BfButton.vue'
+import BfDialogHeader from '../shared/BfDialogHeader/BfDialogHeader.vue'
 
-import FormatMetric from '../../mixins/bf-storage-metrics'
-import Request from '@/mixins/request'
 export default {
-  name: 'DownloadDataset',
+  name: 'RehydrationModal',
 
   components: {
-    BfButton
+    BfButton,
+    BfDialogHeader
   },
-
-  mixins: [FormatMetric, Request],
 
   props: {
     visible: {
@@ -38,75 +41,22 @@ export default {
   },
 
   computed: {
-    /**
-     * Indicates whether the version being viewed is the latest version
-     * @returns {Boolean}
-     */
-    isLatestVersion() {
-      const currentVersion = propOr(0, 'version', this.datasetDetails)
-      const latestVersion = compose(propOr(1, 'version'), head)(this.versions)
-      return currentVersion === latestVersion
-    },
-    /**
-     * Checks whether the dataset download size is larger or smaller than 1GB
-     * @returns {Boolean}
-     */
-    isDatasetSizeLarge() {
-      const datasetSize = propOr(0, 'size', this.datasetDetails)
-      return datasetSize > process.env.max_download_size
-    },
-
-    /**
-     * Compute width based on isDatasetSizeLarge
-     * @returns {String}
-     */
-    width() {
-      return this.isDatasetSizeLarge ? '490px' : '772px'
-    },
-
-    /**
-     * Gets dataset id
-     * @returns {Number}
-     */
-    datasetId() {
-      return propOr(0, 'id', this.datasetDetails)
-    },
-
-    /**
-     * Gets dataset version
-     * @returns {Number}
-     */
-    version() {
-      return propOr(0, 'version', this.datasetDetails)
-    },
-
-    /**
-     * Gets dataset ARN
-     * @returns {String}
-     */
-    datasetArn() {
-      return propOr('', 'uri', this.datasetDetails)
-    },
-
-    /**
-     * Computes the API url for downloading a dataset
-     * @returns {String}
-     */
-    downloadUrl() {
-      return this.generateUrlWithToken(
-        `${process.env.discover_api_host}/datasets/${this.datasetId}/versions/${this.version}/download?downloadOrigin=Discover`
-      )
+    ...mapState(['userToken']),
+    isUserAuthenticated() {
+      return false
     }
   },
 
-  mounted() {},
+  mounted() {
+    console.log('logging the userToken', this.userToken)
+  },
 
   methods: {
     /**
      * Closes dialog
      */
     closeDialog() {
-      this.$emit('close-download-dialog')
+      this.$emit('close-rehydration-dialog')
     }
   }
 }

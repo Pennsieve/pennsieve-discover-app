@@ -63,8 +63,9 @@
         <div class="rehydration-btn-container">
           <bf-button
             v-if="!isLatestVersion"
+            key="btn-request-rehydration"
             class="rehydration-btn"
-            @click="openRequestRehydrationModal"
+            @click="openRehydrationModal"
           >
             Request Rehydration
           </bf-button>
@@ -82,8 +83,8 @@
 import { compose, head, propOr } from 'ramda'
 
 import BfButton from '../shared/BfButton/BfButton.vue'
-
 import FormatMetric from '../../mixins/bf-storage-metrics'
+
 import Request from '@/mixins/request'
 import RehydrationModal from '@/components/RehydrationModal/RehydrationModal.vue'
 
@@ -192,8 +193,10 @@ export default {
     /**
      * Opens the version history modal
      */
-    openRequestRehydrationModal() {
-      this.isRequestRehydrationModalVisible = true
+    openRehydrationModal() {
+      this.isRehydrationModalVisible = true
+
+      this.$emit('close-download-dialog')
     }
   }
 }
