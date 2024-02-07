@@ -80,7 +80,7 @@ export default {
     },
 
     /**
-     * Compute name from ORCID profile
+     * Compute name from ORCID
      * @returns {String}
      */
     orcidName() {

@@ -74,7 +74,8 @@
     </el-dialog>
     <rehydration-modal
       :visible.sync="isRehydrationModalVisible"
-      current-version="version"
+      :version="version"
+      :dataset-id="datasetId"
       @close-rehydration-dialog="isRehydrationModalVisible = false"
     />
   </div>
@@ -176,9 +177,8 @@ export default {
      * @returns {Boolean}
      */
     isLatestVersion() {
-      const currentVersion = propOr(0, 'version', this.datasetDetails)
       const latestVersion = compose(propOr(1, 'version'), head)(this.versions)
-      return currentVersion === latestVersion
+      return this.version === latestVersion
     }
   },
 
