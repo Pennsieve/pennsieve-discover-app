@@ -74,6 +74,7 @@
     </el-dialog>
     <rehydration-modal
       :visible.sync="isRehydrationModalVisible"
+      current-version="version"
       @close-rehydration-dialog="isRehydrationModalVisible = false"
     />
   </div>
