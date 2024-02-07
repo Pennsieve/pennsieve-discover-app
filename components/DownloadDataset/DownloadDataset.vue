@@ -121,15 +121,6 @@ export default {
 
   computed: {
     /**
-     * Indicates whether the version being viewed is the latest version
-     * @returns {Boolean}
-     */
-    isLatestVersion() {
-      const currentVersion = propOr(0, 'version', this.datasetDetails)
-      const latestVersion = compose(propOr(1, 'version'), head)(this.versions)
-      return currentVersion === latestVersion
-    },
-    /**
      * Checks whether the dataset download size is larger or smaller than 1GB
      * @returns {Boolean}
      */
@@ -178,6 +169,15 @@ export default {
       return this.generateUrlWithToken(
         `${process.env.discover_api_host}/datasets/${this.datasetId}/versions/${this.version}/download?downloadOrigin=Discover`
       )
+    },
+    /**
+     * Indicates whether the version being viewed is the latest version
+     * @returns {Boolean}
+     */
+    isLatestVersion() {
+      const currentVersion = propOr(0, 'version', this.datasetDetails)
+      const latestVersion = compose(propOr(1, 'version'), head)(this.versions)
+      return currentVersion === latestVersion
     }
   },
 
