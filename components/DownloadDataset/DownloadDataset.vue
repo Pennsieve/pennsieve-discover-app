@@ -59,16 +59,16 @@
           <div class="text-block">
             us-east-1
           </div>
-        </div>
-        <div class="rehydration-btn-container">
-          <bf-button
-            v-if="!isLatestVersion"
-            key="btn-request-rehydration"
-            class="rehydration-btn"
-            @click="openRehydrationModal"
-          >
-            Request Rehydration
-          </bf-button>
+          <div class="rehydration-btn-container">
+            <bf-button
+              v-if="!isLatestVersion"
+              key="btn-request-rehydration"
+              class="rehydration-btn"
+              @click="openRehydrationModal"
+            >
+              Request Rehydration
+            </bf-button>
+          </div>
         </div>
       </div>
     </el-dialog>
@@ -207,13 +207,11 @@ export default {
 .download-dataset-dialog {
   .download-dataset-container {
     display: flex;
-    flex-direction: column;
     word-break: normal;
   }
   .download-block {
     box-sizing: border-box;
     flex-shrink: 0;
-    height: 100%;
     width: 316px;
     overflow: hidden;
     position: relative;
@@ -353,7 +351,6 @@ export default {
   justify-content: flex-start;
 }
 .rehydration-btn {
-  margin-left: 47px;
   margin-bottom: 25px;
   font-weight: 600;
   line-height: 16px;
