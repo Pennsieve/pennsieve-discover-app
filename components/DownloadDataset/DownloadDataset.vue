@@ -40,6 +40,15 @@
           v-if="!isLatestVersion"
           :class="[isDatasetSizeLarge ? 'aws-container' : 'aws-block']"
         >
+          <button class="close-dialog" @click="closeDialog">
+            <svg-icon
+              name="icon-remove"
+              width="16"
+              height="16"
+              color="#71747c"
+              class="close-icon"
+            />
+          </button>
           <h1>Requesting Access to Download from AWS</h1>
           <p>
             In order to request access to download this dataset, we ask that you
