@@ -1,10 +1,6 @@
 <template>
   <el-dialog :visible="visible" :show-close="false" @close="closeDialog">
-    <bf-dialog-header
-      slot="title"
-      title="Request
-    Rehydration"
-    />
+    <bf-dialog-header slot="title" title="Request Rehydration" />
     <div class="rehydration-modal-container">
       <div class="copy-container">
         <h2>
