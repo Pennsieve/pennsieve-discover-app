@@ -41,10 +41,10 @@
             Version {{ version.version }}
           </nuxt-link>
         </div>
-        <div class="col-xs-3">
+        <div class="col-xs-4">
           {{ formatDate(version.versionPublishedAt) }}
         </div>
-        <div class="col-xs-5 col-xs-offset-1">
+        <div class="col-xs-4 col-xs-offset-1">
           {{ version.doi }}
         </div>
       </div>

@@ -506,7 +506,6 @@ export default {
       this.updateUserToken(token)
       const url = `${this.userUrl}` + `?api_key=${token}`
       this.$axios.$get(url).then((response) => {
-        console.log('do we get here?', response)
         this.updateProfile(response)
       })
       this.closeLogInDialog()
