@@ -14,10 +14,11 @@
           dataset will then be available for 14 days.
         </p>
       </div>
-      <div v-if="isUserAuthenticated">
+      <!-- TODO: add ability to show user their own email address so they know where to look for the email. In dev environment it was blank with this implementation-->
+      <!-- <div v-if="isUserAuthenticated">
         We will email you at the following address:
         {{ authenticatedUserEmail }}
-      </div>
+      </div> -->
       <p class="paragraph">
         Please contact Pennsieve Support at support@pennsieve.io if you have any
         questions.
@@ -56,12 +57,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import { composeP, pathOr } from 'ramda'
+import { pathOr } from 'ramda'
 import BfButton from '../shared/BfButton/BfButton.vue'
 import BfDialogHeader from '../shared/BfDialogHeader/BfDialogHeader.vue'
 import Request from '@/mixins/request'
-
-import config from '../../nuxt.config'
 
 export default {
   name: 'RehydrationModal',
@@ -148,7 +147,7 @@ export default {
     /**
      * Click Hander for submit rehydration request button
      */
-    submitRehydrationRequest() {
+    async submitRehydrationRequest() {
       const isAuthenticated = Object.keys(this.profile).length > 0
       const firstName = pathOr('', ['firstName'], this.profile)
       const lastName = pathOr('', ['lastName'], this.profile)
@@ -158,22 +157,26 @@ export default {
       // replace with config.env.api_host
       const url = `https://api2.pennsieve.net/discover/rehydrate`
       // TODO: don't forget to change this to pull from the ENV instead of being hard coded.
-
-      this.sendXhr(url, {
-        method: 'POST',
-        body: {
-          datasetVersionId: this.version,
-          datasetId: this.datasetId,
-          name: isAuthenticated
-            ? `${firstName} ${lastName}`
-            : this.formData.unauthenticatedUserName,
-          email: isAuthenticated
-            ? email
-            : this.formData.unauthenticatedUserEmail
-        }
-      }).then((resp) => {})
-      this.clearForm()
-      this.closeDialog()
+      try {
+        await this.sendXhr(url, {
+          method: 'POST',
+          body: {
+            datasetVersionId: this.version,
+            datasetId: this.datasetId,
+            name: isAuthenticated
+              ? `${firstName} ${lastName}`
+              : this.formData.unauthenticatedUserName,
+            email: isAuthenticated
+              ? email
+              : this.formData.unauthenticatedUserEmail
+          }
+        })
+        // when the API call is successful, make a toast pop up that tells the user that the request has been successful.
+      } catch (error) {
+        this.clearForm()
+        this.closeDialog()
+        // Make a toast that tells the user there is an error pop up here
+      }
     }
   }
 }
