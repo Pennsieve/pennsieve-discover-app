@@ -91,7 +91,8 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/robots',
-    'cookie-universal-nuxt'
+    'cookie-universal-nuxt',
+    '@nuxtjs/recaptcha'
   ],
   /*
    ** robots.txt
@@ -136,6 +137,19 @@ export default {
         path: '/datasets/:id/version/:version',
         component: '@/pages/datasets/_id.vue'
       })
+    }
+  },
+
+  recaptcha: {
+    hideBadge: false,
+    mode: 'base',
+    version: 3,
+    size: 'compact'
+  },
+
+  publicRuntimeConfig: {
+    recaptcha: {
+      siteKey: '6Le2Wr0aAAAAAHouFUEmy7UwN6b9wa_PPRGrWxAG' 
     }
   }
 }
