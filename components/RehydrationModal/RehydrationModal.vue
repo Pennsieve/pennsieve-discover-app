@@ -113,8 +113,13 @@ export default {
     }
   },
 
-  mounted() {
+  async mounted() {
     this.authenticatedUserEmail = pathOr('', ['email'], this.profile)
+    try {
+      await this.$recaptcha.init();
+    } catch (e) {
+      console.error(e);
+    }
   },
 
   methods: {
@@ -153,6 +158,8 @@ export default {
       const lastName = pathOr('', ['lastName'], this.profile)
       const email = pathOr('', ['email'], this.profile)
 
+      const recaptchaToken = await this.generateRecaptchaToken();
+
       // make API call the rehydration endpoint
       // replace with config.env.api_host
       const url = `https://api2.pennsieve.net/discover/rehydrate`
@@ -168,7 +175,8 @@ export default {
               : this.formData.unauthenticatedUserName,
             email: isAuthenticated
               ? email
-              : this.formData.unauthenticatedUserEmail
+              : this.formData.unauthenticatedUserEmail,
+            recaptchaToken: recaptchaToken
           }
         })
         // when the API call is successful, make a toast pop up that tells the user that the request has been successful.
@@ -177,7 +185,23 @@ export default {
         this.closeDialog()
         // Make a toast that tells the user there is an error pop up here
       }
+    },
+    /**
+     * Generates ReCAPTCHA token to be sent to rehydration api for validation
+     */
+    async generateRecaptchaToken() {
+      try {
+        const token = await this.$recaptcha.execute()
+        return token;
+
+      } catch (error) {
+        console.error(error)
+      }
     }
+  },
+
+  beforeDestroy() {
+    this.$recaptcha.destroy()
   }
 }
 </script>
