@@ -19,11 +19,11 @@
         We will email you at the following address:
         {{ authenticatedUserEmail }}
       </div> -->
-      <p class="paragraph">
-        Please contact Pennsieve Support at support@pennsieve.io if you have any
+      <p class="paragraph support-msg">
+        Please contact Pennsieve Support at <a href="mailto:support@pennsieve.io">support@pennsieve.io</a> if you have any
         questions.
       </p>
-      <div class="copy-container" v-if="!isUserAuthenticated">
+      <div v-if="!isUserAuthenticated">
         <el-form
           id="rehydration-request-form"
           ref="rehydrationForm"
@@ -220,6 +220,27 @@ export default {
 }
 </script>
 
+<style lang="scss">
+@import '../../assets/css/_variables.scss';
+
+.el-form-item__label {
+  color: $text-color;
+  font-weight: 500;
+  line-height: 16px;
+  margin-bottom: 8px;
+}
+
+.el-form-item.is-required {
+  .el-form-item__label:before {
+    display: none;
+  }
+}
+
+.el-form-item {
+  margin-bottom: 16px
+}
+</style>
+
 <style lang="scss" scoped>
 .copy-container {
   word-break: break-word;
@@ -229,14 +250,8 @@ export default {
   word-break: break-word;
 }
 
-.input-container {
-  display: flex;
-  flex-direction: column;
-  max-width: 200px;
-  margin-bottom: 10px;
+.support-msg, h2 {
+  margin-bottom: 16px;
 }
 
-.error {
-  color: red;
-}
 </style>
