@@ -160,10 +160,8 @@ export default {
 
       const recaptchaToken = await this.generateRecaptchaToken();
 
-      // make API call the rehydration endpoint
-      // replace with config.env.api_host
-      const url = `https://api2.pennsieve.net/discover/rehydrate`
-      // TODO: don't forget to change this to pull from the ENV instead of being hard coded.
+      const url = `${process.env.api2_host}/discover/rehydrate`
+
       try {
         await this.sendXhr(url, {
           method: 'POST',
