@@ -51,3 +51,10 @@
     opacity: .7
   }
 }
+
+.el-message.request-submitted {
+  box-sizing: border-box;
+  max-width: 600px;
+  top: 130px !important;
+  width: 100%;
+}

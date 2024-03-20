@@ -61,6 +61,7 @@ import { pathOr } from 'ramda'
 import BfButton from '../shared/BfButton/BfButton.vue'
 import BfDialogHeader from '../shared/BfDialogHeader/BfDialogHeader.vue'
 import Request from '@/mixins/request'
+import EventBus from '@/utils/event-bus'
 
 export default {
   name: 'RehydrationModal',
@@ -179,10 +180,24 @@ export default {
             recaptchaToken: recaptchaToken
           }
         })
-        // when the API call is successful, make a toast pop up that tells the user that the request has been successful.
+        this.closeDialog()
+        EventBus.$emit('toast', {
+            detail: {
+              msg: `Your request has been successfully submitted.`,
+              type: 'SUCCESS',
+              class: 'request-submitted'
+            }
+          })
       } catch (error) {
         this.clearForm()
         this.closeDialog()
+        EventBus.$emit('toast', {
+            detail: {
+              msg: `Failed to submit the request`,
+              type: 'ERROR',
+              class: 'request-submitted'
+            }
+          })
         // Make a toast that tells the user there is an error pop up here
       }
     },
