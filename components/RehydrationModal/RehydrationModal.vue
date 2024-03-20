@@ -19,35 +19,30 @@
         We will email you at the following address:
         {{ authenticatedUserEmail }}
       </div> -->
-      <p class="paragraph">
-        Please contact Pennsieve Support at support@pennsieve.io if you have any
+      <p class="paragraph support-msg">
+        Please contact Pennsieve Support at <a href="mailto:support@pennsieve.io">support@pennsieve.io</a> if you have any
         questions.
       </p>
-      <div class="copy-container" v-if="!isUserAuthenticated">
-        <form @submit.prevent="submitForm" ref="form">
-          <div class="input-container">
-            <label class="bold" for="unauthenticatedUserName">Full Name</label>
-            <input
-              id="unauthenticatedUserName"
-              v-model="formData.unauthenticatedUserName"
-              type="text"
-              @input="getFormValidity"
-            />
-          </div>
-          <div class="input-container">
-            <label class="bold" for="unauthenticatedUserEmail">Email</label>
-            <input
-              id="unauthenticatedUserEmail"
-              v-model="formData.unauthenticatedUserEmail"
-              type="email"
-              @input="getFormValidity"
-            />
-          </div>
-        </form>
+      <div v-if="!isUserAuthenticated">
+        <el-form
+          id="rehydration-request-form"
+          ref="rehydrationForm"
+          :model="rehydrationForm"
+          :rules="rehydrationRules"
+          @keyup.enter.native="onFormSubmit"
+        >
+        <el-form-item label="Full Name" prop="unauthenticatedUserName">
+          <el-input
+          v-model="rehydrationForm.unauthenticatedUserName" required class="full-name-input" autofocus></el-input>
+        </el-form-item>
+        <el-form-item label="Email" prop="unauthenticatedEmail">
+              <el-input v-model="rehydrationForm.unauthenticatedEmail" required />
+            </el-form-item>
+        </el-form>
+        
       </div>
       <bf-button
-        @click="submitRehydrationRequest"
-        :disabled="!isUserAuthenticated && !isFormValid"
+        @click="onFormSubmit"
       >
         Submit
       </bf-button>
@@ -93,13 +88,30 @@ export default {
 
   data() {
     return {
-      formData: {
+      rehydrationForm : {
         unauthenticatedUserName: '',
-        unauthenticatedUserEmail: ''
+        unauthenticatedEmail: ''
+      },
+      rehydrationRules: {
+        unauthenticatedUserName: [
+          {
+            required: true,
+            message: 'Please enter your full name',
+            trigger: 'submit',
+          }
+        ],
+        unauthenticatedEmail: [
+          {
+            required: true,
+            message: 'Please enter a valid email',
+            trigger: 'submit',
+            type: 'email'
+          }
+        ]
       },
       isRehydrationModalVisible: false,
       authenticatedUserEmail: '',
-      isFormValid: false
+      isFormValid: false,
     }
   },
 
@@ -125,33 +137,34 @@ export default {
 
   methods: {
     /**
-     * Checks validity of form
-     */
-    getFormValidity() {
-      this.isFormValid =
-        this.formData.unauthenticatedUserName &&
-        this.formData.unauthenticatedUserEmail &&
-        this.$refs.form.checkValidity()
-    },
-    /**
      * Clears the form
      */
     clearForm() {
-      this.formData = {
-        unauthenticatedUserName: '',
-        unauthenticatedUserEmail: ''
-      }
-      this.isFormValid = false
+      this.$refs.rehydrationForm.resetFields()
     },
     /**
      * Closes dialog
      */
     closeDialog() {
-      this.clearForm()
+      if(!this.isUserAuthenticated) {
+        this.clearForm();
+      }
       this.$emit('close-rehydration-dialog')
     },
+    onFormSubmit() {
+      if(this.isUserAuthenticated) {   
+        this.submitRehydrationRequest();     
+      } else {
+        this.$refs.rehydrationForm.validate(valid => {
+          if(!valid) {
+            return;
+          }
+          this.submitRehydrationRequest();
+        })
+      }
+    },
     /**
-     * Click Hander for submit rehydration request button
+     * Click Handler for submit rehydration request button
      */
     async submitRehydrationRequest() {
       const isAuthenticated = Object.keys(this.profile).length > 0
@@ -161,10 +174,8 @@ export default {
 
       const recaptchaToken = await this.generateRecaptchaToken();
 
-      // make API call the rehydration endpoint
-      // replace with config.env.api_host
-      const url = `https://api2.pennsieve.net/discover/rehydrate`
-      // TODO: don't forget to change this to pull from the ENV instead of being hard coded.
+      const url = `${process.env.api2_host}/discover/rehydrate`
+
       try {
         await this.sendXhr(url, {
           method: 'POST',
@@ -173,10 +184,10 @@ export default {
             datasetId: this.datasetId,
             name: isAuthenticated
               ? `${firstName} ${lastName}`
-              : this.formData.unauthenticatedUserName,
+              : this.rehydrationForm.unauthenticatedUserName,
             email: isAuthenticated
               ? email
-              : this.formData.unauthenticatedUserEmail,
+              : this.rehydrationForm.unauthenticatedEmail,
             recaptchaToken: recaptchaToken
           }
         })
@@ -189,7 +200,6 @@ export default {
             }
           })
       } catch (error) {
-        this.clearForm()
         this.closeDialog()
         EventBus.$emit('toast', {
             detail: {
@@ -221,10 +231,28 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.bold {
-  font-weight: bold;
+<style lang="scss">
+@import '../../assets/css/_variables.scss';
+
+.el-form-item__label {
+  color: $text-color;
+  font-weight: 500;
+  line-height: 16px;
+  margin-bottom: 8px;
 }
+
+.el-form-item.is-required {
+  .el-form-item__label:before {
+    display: none;
+  }
+}
+
+.el-form-item {
+  margin-bottom: 16px
+}
+</style>
+
+<style lang="scss" scoped>
 .copy-container {
   word-break: break-word;
 }
@@ -233,14 +261,8 @@ export default {
   word-break: break-word;
 }
 
-.input-container {
-  display: flex;
-  flex-direction: column;
-  max-width: 200px;
-  margin-bottom: 10px;
+.support-msg, h2 {
+  margin-bottom: 16px;
 }
 
-.error {
-  color: red;
-}
 </style>
