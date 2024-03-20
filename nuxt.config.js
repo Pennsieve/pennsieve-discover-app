@@ -43,17 +43,17 @@ export default {
   env: {
     discover_api_host:
       process.env.PENNSIEVE_DISCOVER_API_HOST ||
-      'https://api.pennsieve.net/discover',
+      'https://api.pennsieve.io/discover',
     zipit_host:
       process.env.PENNSIEVE_ZIPIT_HOST ||
-      'https://api.pennsieve.net/zipit/discover',
+      'https://api.pennsieve.io/zipit/discover',
     ts_streaming_host:
       process.env.PENNSIEVE_STREAMING ||
-      'wss://api.pennsieve.net/streaming/discover/ts/query',
+      'wss://api.pennsieve.io/streaming/discover/ts/query',
     max_download_size: parseInt(process.env.MAX_DOWNLOAD_SIZE || '5000000000'),
     googleTagManager: process.env.PENNSIEVE_DISCOVER_GOOGLE_TAG_MANAGER || '',
     siteUrl: process.env.SITE_URL || 'https://localhost:3000',
-    api_host: process.env.PENNSIEVE_API_HOST || 'https://api.pennsieve.net',
+    api_host: process.env.PENNSIEVE_API_HOST || 'https://api.pennsieve.io',
     region: process.env.REGION || 'us-east-1',
     userPoolId: process.env.USER_POOL_ID || 'us-east-1_FVLhJ7CQA',
     userPoolWebClientId:
