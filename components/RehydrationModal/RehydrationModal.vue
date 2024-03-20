@@ -116,9 +116,9 @@ export default {
   async mounted() {
     this.authenticatedUserEmail = pathOr('', ['email'], this.profile)
     try {
-      await this.$recaptcha.init()
+      await this.$recaptcha.init();
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   },
 
@@ -158,9 +158,12 @@ export default {
       const lastName = pathOr('', ['lastName'], this.profile)
       const email = pathOr('', ['email'], this.profile)
 
-      const recaptchaToken = await this.generateRecaptchaToken()
+      const recaptchaToken = await this.generateRecaptchaToken();
 
-      const url = `${process.env.api2_host}/discover/rehydrate`
+      // make API call the rehydration endpoint
+      // replace with config.env.api_host
+      const url = `https://api2.pennsieve.net/discover/rehydrate`
+      // TODO: don't forget to change this to pull from the ENV instead of being hard coded.
       try {
         await this.sendXhr(url, {
           method: 'POST',
@@ -173,7 +176,7 @@ export default {
             email: isAuthenticated
               ? email
               : this.formData.unauthenticatedUserEmail,
-            recaptchaToken
+            recaptchaToken: recaptchaToken
           }
         })
         // when the API call is successful, make a toast pop up that tells the user that the request has been successful.
@@ -189,7 +192,8 @@ export default {
     async generateRecaptchaToken() {
       try {
         const token = await this.$recaptcha.execute()
-        return token
+        return token;
+
       } catch (error) {
         console.error(error)
       }
