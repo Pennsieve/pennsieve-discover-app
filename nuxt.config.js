@@ -54,6 +54,7 @@ export default {
     googleTagManager: process.env.PENNSIEVE_DISCOVER_GOOGLE_TAG_MANAGER || '',
     siteUrl: process.env.SITE_URL || 'https://localhost:3000',
     api_host: process.env.PENNSIEVE_API_HOST || 'https://api.pennsieve.io',
+    api2_host: process.env.PENNSIEVE_API2_HOST || 'https://api2.pennsieve.io',
     region: process.env.REGION || 'us-east-1',
     userPoolId: process.env.USER_POOL_ID || 'us-east-1_FVLhJ7CQA',
     userPoolWebClientId:
