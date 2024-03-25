@@ -20,7 +20,10 @@
     }
   }
   &.el-message--error {
-    background: $error-color
+    background: $error-color;
+    .el-message__content {
+      color: #fff;
+    }
   }
   &.el-message--info {
     background: $notification-color;
@@ -50,4 +53,11 @@
     color: $white-matter;
     opacity: .7
   }
+}
+
+.el-message.request-submitted {
+  box-sizing: border-box;
+  max-width: 600px;
+  top: 130px !important;
+  width: 100%;
 }

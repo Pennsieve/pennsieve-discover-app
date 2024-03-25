@@ -800,11 +800,3 @@ export default {
   margin-top: 32px;
 }
 </style>
-<style lang="scss">
-.el-message.request-submitted {
-  box-sizing: border-box;
-  max-width: 600px;
-  top: 115px !important;
-  width: 100%;
-}
-</style>

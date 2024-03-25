@@ -56,6 +56,7 @@ import { pathOr } from 'ramda'
 import BfButton from '../shared/BfButton/BfButton.vue'
 import BfDialogHeader from '../shared/BfDialogHeader/BfDialogHeader.vue'
 import Request from '@/mixins/request'
+import EventBus from '@/utils/event-bus'
 
 export default {
   name: 'RehydrationModal',
@@ -173,31 +174,37 @@ export default {
 
       const recaptchaToken = await this.generateRecaptchaToken();
 
-      const url = `${process.env.api2_host}/discover/rehydrate`
+      const url = `${process.env.api2_host}/discover/rehydrate`;
 
-      try {
-        await this.sendXhr(url, {
-          method: 'POST',
-          body: {
-            datasetVersionId: this.version,
-            datasetId: this.datasetId,
-            name: isAuthenticated
-              ? `${firstName} ${lastName}`
-              : this.rehydrationForm.unauthenticatedUserName,
-            email: isAuthenticated
-              ? email
-              : this.rehydrationForm.unauthenticatedEmail,
-            recaptchaToken: recaptchaToken
-          }
-        })
+      EventBus.$on('ajaxError', this.reqestRehydrationError.bind(this))
 
-        this.closeDialog()
-        // when the API call is successful, make a toast pop up that tells the user that the request has been successful.
-      } catch (error) {
-        this.closeDialog()
-        // Make a toast that tells the user there is an error pop up here
-      }
-    },
+      await this.sendXhr(url, {
+        method: 'POST',
+        body: {
+          datasetVersionId: this.version,
+          datasetId: this.datasetId,
+          name: isAuthenticated
+            ? `${firstName} ${lastName}`
+            : this.rehydrationForm.unauthenticatedUserName,
+          email: isAuthenticated
+            ? email
+            : this.rehydrationForm.unauthenticatedEmail,
+          recaptchaToken: recaptchaToken
+        }
+      }).then((data) => {
+        if(data) {
+          EventBus.$emit('toast', {
+            detail: {
+              msg: `Your request has been successfully submitted.`,
+              type: 'SUCCESS',
+              class: 'request-submitted'
+            }
+          });
+        }
+      });
+      this.closeDialog();
+
+      },
     /**
      * Generates ReCAPTCHA token to be sent to rehydration api for validation
      */
@@ -209,10 +216,21 @@ export default {
       } catch (error) {
         console.error(error)
       }
+    },
+
+    reqestRehydrationError() {
+      EventBus.$emit('toast', {
+            detail: {
+              msg: `Failed to submit your request, please try later.`,
+              type: 'ERROR',
+              class: 'request-submitted'
+            }
+          })
     }
   },
 
   beforeDestroy() {
+    EventBus.$off('ajaxError', this.reqestRehydrationError.bind(this))
     this.$recaptcha.destroy()
   }
 }
