@@ -30,13 +30,14 @@
           :model="rehydrationForm"
           :rules="rehydrationRules"
           @keyup.enter.native="onFormSubmit"
+          hide-required-asterisk
         >
         <el-form-item label="Full Name" prop="unauthenticatedUserName">
           <el-input
-          v-model="rehydrationForm.unauthenticatedUserName" required class="full-name-input" autofocus></el-input>
+          v-model="rehydrationForm.unauthenticatedUserName" class="full-name-input" autofocus></el-input>
         </el-form-item>
         <el-form-item label="Email" prop="unauthenticatedEmail">
-              <el-input v-model="rehydrationForm.unauthenticatedEmail" required />
+              <el-input v-model="rehydrationForm.unauthenticatedEmail"/>
             </el-form-item>
         </el-form>
         
@@ -97,14 +98,14 @@ export default {
           {
             required: true,
             message: 'Please enter your full name',
-            trigger: 'submit',
+            trigger: 'blur',
           }
         ],
         unauthenticatedEmail: [
           {
             required: true,
             message: 'Please enter a valid email',
-            trigger: 'submit',
+            trigger: 'blur',
             type: 'email'
           }
         ]
@@ -246,14 +247,11 @@ export default {
   margin-bottom: 8px;
 }
 
-.el-form-item.is-required {
-  .el-form-item__label:before {
-    display: none;
-  }
-}
-
 .el-form-item {
-  margin-bottom: 16px
+  margin-bottom: 16px;
+  &.is-error {
+    margin-bottom: 32px;
+  }
 }
 </style>
 
