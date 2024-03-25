@@ -20,7 +20,10 @@
     }
   }
   &.el-message--error {
-    background: $error-color
+    background: $error-color;
+    .el-message__content {
+      color: #fff;
+    }
   }
   &.el-message--info {
     background: $notification-color;

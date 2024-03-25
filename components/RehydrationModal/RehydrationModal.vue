@@ -174,43 +174,37 @@ export default {
 
       const recaptchaToken = await this.generateRecaptchaToken();
 
-      const url = `${process.env.api2_host}/discover/rehydrate`
+      const url = `${process.env.api2_host}/discover/rehydrate`;
 
-      try {
-        await this.sendXhr(url, {
-          method: 'POST',
-          body: {
-            datasetVersionId: this.version,
-            datasetId: this.datasetId,
-            name: isAuthenticated
-              ? `${firstName} ${lastName}`
-              : this.rehydrationForm.unauthenticatedUserName,
-            email: isAuthenticated
-              ? email
-              : this.rehydrationForm.unauthenticatedEmail,
-            recaptchaToken: recaptchaToken
-          }
-        })
-        this.closeDialog()
-        EventBus.$emit('toast', {
+      EventBus.$on('ajaxError', this.reqestRehydrationError.bind(this))
+
+      await this.sendXhr(url, {
+        method: 'POST',
+        body: {
+          datasetVersionId: this.version,
+          datasetId: this.datasetId,
+          name: isAuthenticated
+            ? `${firstName} ${lastName}`
+            : this.rehydrationForm.unauthenticatedUserName,
+          email: isAuthenticated
+            ? email
+            : this.rehydrationForm.unauthenticatedEmail,
+          recaptchaToken: recaptchaToken
+        }
+      }).then((data) => {
+        if(data) {
+          EventBus.$emit('toast', {
             detail: {
               msg: `Your request has been successfully submitted.`,
               type: 'SUCCESS',
               class: 'request-submitted'
             }
-          })
-      } catch (error) {
-        this.closeDialog()
-        EventBus.$emit('toast', {
-            detail: {
-              msg: `Failed to submit the request`,
-              type: 'ERROR',
-              class: 'request-submitted'
-            }
-          })
-        // Make a toast that tells the user there is an error pop up here
-      }
-    },
+          });
+        }
+      });
+      this.closeDialog();
+
+      },
     /**
      * Generates ReCAPTCHA token to be sent to rehydration api for validation
      */
@@ -222,10 +216,21 @@ export default {
       } catch (error) {
         console.error(error)
       }
+    },
+
+    reqestRehydrationError() {
+      EventBus.$emit('toast', {
+            detail: {
+              msg: `Failed to submit your request, please try later.`,
+              type: 'ERROR',
+              class: 'request-submitted'
+            }
+          })
     }
   },
 
   beforeDestroy() {
+    EventBus.$off('ajaxError', this.reqestRehydrationError.bind(this))
     this.$recaptcha.destroy()
   }
 }
