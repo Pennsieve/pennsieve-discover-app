@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible="visible" :show-close="false" @close="closeDialog">
+  <el-dialog :visible="visible" :show-close="false" @close="closeDialog" @open="intializeReacaptcha">
     <bf-dialog-header slot="title" title="Request Rehydration" />
     <div class="rehydration-modal-container">
       <div class="copy-container">
@@ -129,11 +129,6 @@ export default {
 
   async mounted() {
     this.authenticatedUserEmail = pathOr('', ['email'], this.profile)
-    try {
-      await this.$recaptcha.init();
-    } catch (e) {
-      console.error(e);
-    }
   },
 
   methods: {
@@ -150,7 +145,8 @@ export default {
       if(!this.isUserAuthenticated) {
         this.clearForm();
       }
-      this.$emit('close-rehydration-dialog')
+      this.$emit('close-rehydration-dialog');
+      this.$recaptcha.destroy();
     },
     onFormSubmit() {
       if(this.isUserAuthenticated) {   
@@ -218,7 +214,9 @@ export default {
         console.error(error)
       }
     },
-
+    /**
+     * Error handler for request rehydration submission
+     */
     reqestRehydrationError() {
       EventBus.$emit('toast', {
             detail: {
@@ -227,12 +225,21 @@ export default {
               class: 'request-submitted'
             }
           })
-    }
+    },
+    /**
+    * initialize recaptcha background process
+    */
+    async intializeReacaptcha() {
+        try {
+        await this.$recaptcha.init();
+        } catch (e) {
+          console.error(e);
+        }
+     },
   },
 
   beforeDestroy() {
     EventBus.$off('ajaxError', this.reqestRehydrationError.bind(this))
-    this.$recaptcha.destroy()
   }
 }
 </script>
