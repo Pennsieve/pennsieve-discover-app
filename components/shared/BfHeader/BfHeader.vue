@@ -1,33 +1,30 @@
 <template>
   <div class="bf-header">
     <div class="logo-wrap">
-      <img
-        src="../../../assets/images/pennsieve-logo-white.svg"
-        class="logo"
-      >
+      <img src="../../../assets/images/pennsieve-logo-white.svg" class="logo" />
     </div>
     <span class="discover-title">Discover</span>
-<!--    <div class="logo-wrap">-->
-<!--      <button id="btn-home">-->
-<!--        <nuxt-link-->
-<!--          :to="{-->
-<!--            name: 'index'-->
-<!--          }"-->
-<!--        >-->
-<!--          <svg-icon name="pennsieve-logo" width="35" height="35" color="#fff" />-->
-<!--        </nuxt-link>-->
-<!--      </button>-->
-<!--      <nuxt-link-->
-<!--        v-if="!isSearchVisible"-->
-<!--        :to="{-->
-<!--          name: 'index'-->
-<!--        }"-->
-<!--        class="header-title"-->
-<!--      >-->
-<!--        <span class="blackfynn-title">Pennsieve</span>-->
-<!--        <span class="discover-title">Discover</span>-->
-<!--      </nuxt-link>-->
-<!--    </div>-->
+    <!--    <div class="logo-wrap">-->
+    <!--      <button id="btn-home">-->
+    <!--        <nuxt-link-->
+    <!--          :to="{-->
+    <!--            name: 'index'-->
+    <!--          }"-->
+    <!--        >-->
+    <!--          <svg-icon name="pennsieve-logo" width="35" height="35" color="#fff" />-->
+    <!--        </nuxt-link>-->
+    <!--      </button>-->
+    <!--      <nuxt-link-->
+    <!--        v-if="!isSearchVisible"-->
+    <!--        :to="{-->
+    <!--          name: 'index'-->
+    <!--        }"-->
+    <!--        class="header-title"-->
+    <!--      >-->
+    <!--        <span class="blackfynn-title">Pennsieve</span>-->
+    <!--        <span class="discover-title">Discover</span>-->
+    <!--      </nuxt-link>-->
+    <!--    </div>-->
 
     <div
       v-if="isSearchVisible"

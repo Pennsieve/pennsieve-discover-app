@@ -49,6 +49,12 @@ const licenseData = [
     link: 'https://creativecommons.org/licenses/by-sa/4.0/'
   },
   {
+    label: 'Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA)',
+    value: 'Creative Commons Attribution - NonCommercial-ShareAlike',
+    abbr: 'CC-BY-NC-SA-4.0',
+    link: 'https://creativecommons.org/licenses/by-nc-sa/4.0/'
+  },
+  {
     label: 'Apache License 2.0 (Apache-2.0)',
     value: 'Apache 2.0',
     abbr: 'Apache 2.0',

@@ -165,6 +165,7 @@
     <download-dataset
       :visible.sync="isDownloadModalVisible"
       :dataset-details="datasetDetails"
+      :versions="versions"
       :download-size="getDownloadSize"
       @close-download-dialog="isDownloadModalVisible = false"
     />
@@ -797,13 +798,5 @@ export default {
   font-size: 16px;
   font-weight: 700;
   margin-top: 32px;
-}
-</style>
-<style lang="scss">
-.el-message.request-submitted {
-  box-sizing: border-box;
-  max-width: 600px;
-  top: 115px !important;
-  width: 100%;
 }
 </style>
