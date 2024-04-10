@@ -1,81 +1,136 @@
 <template>
-  <el-dialog
-    :visible="visible"
-    :show-close="false"
-    class="download-dataset-dialog"
-    :width="width"
-    height="448px"
-    @close="closeDialog"
-  >
-    <div class="download-dataset-container">
-      <div v-if="!isDatasetSizeLarge" class="download-block">
-        <h1>Direct Download</h1>
-        <p>
-          You can download the raw files and metadata directly to your computer
-          as a zip archive.
-        </p>
-        <a :href="downloadUrl">
-          <bf-button class="download-button">Download Dataset</bf-button>
-        </a>
+  <!-- 
+    There are two boolean values that control different versions of this modal.
+    1. isDatasetSizeLarge
+    2. isLatestVersion
+    Test all four permutations when making changes.
 
-        <div class="size">
-          {{ formatMetric(datasetDetails.size) }}
-        </div>
-        <img
-          src="~/assets/images/illustrations/illo-data-management.svg"
-          alt="illustration of data management"
-        />
-      </div>
-      <div :class="[isDatasetSizeLarge ? 'aws-container' : 'aws-block']">
-        <button class="close-dialog" @click="closeDialog">
-          <svg-icon
-            name="icon-remove"
-            width="16"
-            height="16"
-            color="#71747c"
-            class="close-icon"
-          />
-        </button>
-        <h1>Download from AWS</h1>
-        <p>
-          Raw files and metadata are stored in an AWS S3 Requester Pays bucket.
-          You can learn more about
-          <a
-            href="https://docs.pennsieve.io/docs/downloading-a-public-dataset"
-            target="_blank"
-          >
-            downloading data from AWS
+    A third boolen, isRehydrationModalVisible, shows/ hides the Request Rehydration button. 
+    Only show Request Rehydration button when isLatestVersion is false. 
+  -->
+  <div>
+    <el-dialog
+      :visible="visible"
+      :show-close="false"
+      class="download-dataset-dialog"
+      :width="width"
+      height="448px"
+      @close="closeDialog"
+    >
+      <div class="download-dataset-container">
+        <div v-if="!isDatasetSizeLarge" class="download-block">
+          <h1>Direct Download</h1>
+          <p>
+            You can download the raw files and metadata directly to your
+            computer as a zip archive.
+          </p>
+          <a :href="downloadUrl">
+            <bf-button class="download-button">Download Dataset</bf-button>
           </a>
-          in the Help Center.
-        </p>
-        <h2>Resource Type</h2>
-        <p>Amazon S3 Bucket (Requester Pays)</p>
-        <h2>Amazon S3 Bucket</h2>
-        <div class="text-block">
-          {{ datasetArn }}
+
+          <div class="size">
+            {{ formatMetric(datasetDetails.size) }}
+          </div>
+          <img
+            src="~/assets/images/illustrations/illo-data-management.svg"
+            alt="illustration of data management"
+          />
         </div>
-        <h2>AWS Region</h2>
-        <div class="text-block">
-          us-east-1
+        <div
+          v-if="!isLatestVersion"
+          :class="[isDatasetSizeLarge ? 'aws-container' : 'aws-block']"
+        >
+          <button class="close-dialog" @click="closeDialog">
+            <svg-icon
+              name="icon-remove"
+              width="16"
+              height="16"
+              color="#71747c"
+              class="close-icon"
+            />
+          </button>
+          <h1>Requesting Access to Download from AWS</h1>
+          <p>
+            In order to request access to download this dataset, we ask that you
+            please submit a rehydration request. This button will take you to a
+            form where you can submit your request.
+          </p>
+          <div class="rehydrate-dataset-container" v-if="!isLatestVersion">
+            <div class="rehydration-btn-container">
+              <bf-button
+                v-if="!isLatestVersion"
+                key="btn-request-rehydration"
+                class="rehydration-btn"
+                @click="openRehydrationModal"
+              >
+                Request Rehydration
+              </bf-button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          v-if="isLatestVersion"
+          :class="[isDatasetSizeLarge ? 'aws-container' : 'aws-block']"
+        >
+          <button class="close-dialog" @click="closeDialog">
+            <svg-icon
+              name="icon-remove"
+              width="16"
+              height="16"
+              color="#71747c"
+              class="close-icon"
+            />
+          </button>
+          <h1>Download from AWS</h1>
+          <p>
+            Raw files and metadata are stored in an AWS S3 Requester Pays
+            bucket. You can learn more about
+            <a
+              href="https://docs.pennsieve.io/docs/downloading-a-public-dataset"
+              target="_blank"
+            >
+              downloading data from AWS
+            </a>
+            in the Help Center.
+          </p>
+          <h2>Resource Type</h2>
+          <p>Amazon S3 Bucket (Requester Pays)</p>
+          <h2>Amazon S3 Bucket</h2>
+          <div class="text-block">
+            {{ datasetArn }}
+          </div>
+          <h2>AWS Region</h2>
+          <div class="text-block">
+            us-east-1
+          </div>
         </div>
       </div>
-    </div>
-  </el-dialog>
+    </el-dialog>
+    <rehydration-modal
+      :visible.sync="isRehydrationModalVisible"
+      :version="version"
+      :dataset-id="datasetId"
+      @close-rehydration-dialog="isRehydrationModalVisible = false"
+    />
+  </div>
 </template>
 
 <script>
-import { propOr } from 'ramda'
+import { compose, head, propOr } from 'ramda'
 
 import BfButton from '../shared/BfButton/BfButton.vue'
-
 import FormatMetric from '../../mixins/bf-storage-metrics'
+
 import Request from '@/mixins/request'
+import RehydrationModal from '@/components/RehydrationModal/RehydrationModal.vue'
 
 export default {
   name: 'DownloadDataset',
 
   components: {
-    BfButton
+    BfButton,
+    RehydrationModal
   },
 
   mixins: [FormatMetric, Request],
@@ -88,6 +143,16 @@ export default {
     datasetDetails: {
       type: Object,
       default: () => {}
+    },
+    versions: {
+      type: Array,
+      default: () => []
+    }
+  },
+
+  data() {
+    return {
+      isRehydrationModalVisible: false
     }
   },
 
@@ -141,6 +206,14 @@ export default {
       return this.generateUrlWithToken(
         `${process.env.discover_api_host}/datasets/${this.datasetId}/versions/${this.version}/download?downloadOrigin=Discover`
       )
+    },
+    /**
+     * Indicates whether the version being viewed is the latest version
+     * @returns {Boolean}
+     */
+    isLatestVersion() {
+      const latestVersion = compose(propOr(1, 'version'), head)(this.versions)
+      return this.version === latestVersion
     }
   },
 
@@ -149,6 +222,14 @@ export default {
      * Closes dialog
      */
     closeDialog() {
+      this.$emit('close-download-dialog')
+    },
+    /**
+     * Opens the version history modal
+     */
+    openRehydrationModal() {
+      this.isRehydrationModalVisible = true
+
       this.$emit('close-download-dialog')
     }
   }
@@ -159,18 +240,17 @@ export default {
 .download-dataset-dialog {
   .download-dataset-container {
     display: flex;
-    height: 430px;
     word-break: normal;
   }
   .download-block {
     box-sizing: border-box;
     flex-shrink: 0;
-    height: 100%;
     width: 316px;
     overflow: hidden;
     position: relative;
     background-color: #1c46bd;
     padding: 40px 40px 0px 40px;
+    min-height: 378px;
 
     img {
       position: absolute;
@@ -229,6 +309,11 @@ export default {
   }
 
   .aws-container {
+    margin: 21px 48px;
+    margin-top: 47px;
+  }
+
+  .rehydrate-dataset-container {
     margin: 21px 48px;
     margin-top: 47px;
   }
@@ -299,5 +384,21 @@ export default {
       background-color: #11369c;
     }
   }
+}
+.rehydration-btn-container {
+  display: flex;
+  justify-content: center;
+}
+.rehydration-btn {
+  margin-bottom: 25px;
+  font-weight: 600;
+  line-height: 16px;
+  font-size: 14px;
+}
+
+.copy-container {
+  margin: 10px;
+  display: flex;
+  justify-content: center;
 }
 </style>

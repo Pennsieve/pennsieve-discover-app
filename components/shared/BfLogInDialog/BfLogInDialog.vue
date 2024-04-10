@@ -28,7 +28,12 @@
             @submit.native.prevent="onFormSubmit('logInForm')"
           >
             <el-form-item prop="email">
-              <el-input ref="emailField" v-model="logInForm.email" placeholder="Email Address" @keyup.enter.native="onEnter"/>
+              <el-input
+                ref="emailField"
+                v-model="logInForm.email"
+                placeholder="Email Address"
+                @keyup.enter.native="onEnter"
+              />
             </el-form-item>
             <el-form-item prop="password">
               <el-input
