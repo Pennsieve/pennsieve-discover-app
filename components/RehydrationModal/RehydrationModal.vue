@@ -16,7 +16,7 @@
           accessible in an S3 folder. You’ll receive an email from
           support@pennseive.io once the restoration is complete, within 24
           hours. Access lasts for 14 days before automatic removal. Further
-          details are available in the
+          details are available on the
           <a
             href="https://docs.pennsieve.io/docs/requesting-rehydration-of-a-public-dataset"
             >Pennsieve Documentation Hub</a
