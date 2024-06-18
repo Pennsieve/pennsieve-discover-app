@@ -1,17 +1,26 @@
 <template>
-  <el-dialog :visible="visible" :show-close="false" @close="closeDialog" @open="intializeReacaptcha">
-    <bf-dialog-header slot="title" title="Request Rehydration" />
+  <el-dialog
+    :visible="visible"
+    :show-close="false"
+    @close="closeDialog"
+    @open="intializeReacaptcha"
+  >
+    <bf-dialog-header slot="title" title="Request Access" />
     <div class="rehydration-modal-container">
       <div class="copy-container">
         <h2>
-          You are requesting rehydration for version {{ version }} of this
-          dataset.
+          You are requesting access to version {{ version }} of this dataset.
         </h2>
         <p class="paragraph">
-          Once you submit your request, the version of the dataset you've
-          requested will be extracted into an S3 folder. An email notification
-          will be sent within 24 hours of initiating the process. The rehydrated
-          dataset will then be available for 14 days.
+          After submitting your request, the dataset version will be temporarily
+          accessible in an S3 folder. You’ll receive an email from
+          support@pennseive.io once the restoration is complete, within 24
+          hours. Access lasts for 14 days before automatic removal. Further
+          details are available on the
+          <a
+            href="https://docs.pennsieve.io/docs/requesting-rehydration-of-a-public-dataset"
+            >Pennsieve Documentation Hub</a
+          >.
         </p>
       </div>
       <!-- TODO: add ability to show user their own email address so they know where to look for the email. In dev environment it was blank with this implementation-->
@@ -20,8 +29,9 @@
         {{ authenticatedUserEmail }}
       </div> -->
       <p class="paragraph support-msg">
-        Please contact Pennsieve Support at <a href="mailto:support@pennsieve.io">support@pennsieve.io</a> if you have any
-        questions.
+        Please contact Pennsieve Support at
+        <a href="mailto:support@pennsieve.io">support@pennsieve.io</a> if you
+        have any questions.
       </p>
       <div v-if="!isUserAuthenticated">
         <el-form
@@ -32,19 +42,19 @@
           @keyup.enter.native="onFormSubmit"
           hide-required-asterisk
         >
-        <el-form-item label="Full Name" prop="unauthenticatedUserName">
-          <el-input
-          v-model="rehydrationForm.unauthenticatedUserName" class="full-name-input" autofocus></el-input>
-        </el-form-item>
-        <el-form-item label="Email" prop="unauthenticatedEmail">
-              <el-input v-model="rehydrationForm.unauthenticatedEmail"/>
-            </el-form-item>
+          <el-form-item label="Full Name" prop="unauthenticatedUserName">
+            <el-input
+              v-model="rehydrationForm.unauthenticatedUserName"
+              class="full-name-input"
+              autofocus
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="Email" prop="unauthenticatedEmail">
+            <el-input v-model="rehydrationForm.unauthenticatedEmail" />
+          </el-form-item>
         </el-form>
-        
       </div>
-      <bf-button
-        @click="onFormSubmit"
-      >
+      <bf-button @click="onFormSubmit">
         Submit
       </bf-button>
     </div>
@@ -83,13 +93,14 @@ export default {
       default: 0
     },
     closeRehydrationDialog: {
-      type: Function
+      type: Function,
+      default: () => {}
     }
   },
 
   data() {
     return {
-      rehydrationForm : {
+      rehydrationForm: {
         unauthenticatedUserName: '',
         unauthenticatedEmail: ''
       },
@@ -98,7 +109,7 @@ export default {
           {
             required: true,
             message: 'Please enter your full name',
-            trigger: 'blur',
+            trigger: 'blur'
           }
         ],
         unauthenticatedEmail: [
@@ -112,7 +123,7 @@ export default {
       },
       isRehydrationModalVisible: false,
       authenticatedUserEmail: '',
-      isFormValid: false,
+      isFormValid: false
     }
   },
 
@@ -127,7 +138,7 @@ export default {
     }
   },
 
-  async mounted() {
+  mounted() {
     this.authenticatedUserEmail = pathOr('', ['email'], this.profile)
   },
 
@@ -142,21 +153,21 @@ export default {
      * Closes dialog
      */
     closeDialog() {
-      if(!this.isUserAuthenticated) {
-        this.clearForm();
+      if (!this.isUserAuthenticated) {
+        this.clearForm()
       }
-      this.$emit('close-rehydration-dialog');
-      this.$recaptcha.destroy();
+      this.$emit('close-rehydration-dialog')
+      this.$recaptcha.destroy()
     },
     onFormSubmit() {
-      if(this.isUserAuthenticated) {   
-        this.submitRehydrationRequest();     
+      if (this.isUserAuthenticated) {
+        this.submitRehydrationRequest()
       } else {
-        this.$refs.rehydrationForm.validate(valid => {
-          if(!valid) {
-            return;
+        this.$refs.rehydrationForm.validate((valid) => {
+          if (!valid) {
+            return
           }
-          this.submitRehydrationRequest();
+          this.submitRehydrationRequest()
         })
       }
     },
@@ -169,9 +180,9 @@ export default {
       const lastName = pathOr('', ['lastName'], this.profile)
       const email = pathOr('', ['email'], this.profile)
 
-      const recaptchaToken = await this.generateRecaptchaToken();
+      const recaptchaToken = await this.generateRecaptchaToken()
 
-      const url = `${process.env.api2_host}/discover/rehydrate`;
+      const url = `${process.env.api2_host}/discover/rehydrate`
 
       EventBus.$on('ajaxError', this.reqestRehydrationError.bind(this))
 
@@ -189,27 +200,25 @@ export default {
           recaptchaToken: recaptchaToken
         }
       }).then((data) => {
-        if(data) {
+        if (data) {
           EventBus.$emit('toast', {
             detail: {
               msg: `Your request has been successfully submitted.`,
               type: 'SUCCESS',
               class: 'request-submitted'
             }
-          });
+          })
         }
-      });
-      this.closeDialog();
-
-      },
+      })
+      this.closeDialog()
+    },
     /**
      * Generates ReCAPTCHA token to be sent to rehydration api for validation
      */
     async generateRecaptchaToken() {
       try {
         const token = await this.$recaptcha.execute()
-        return token;
-
+        return token
       } catch (error) {
         console.error(error)
       }
@@ -219,23 +228,23 @@ export default {
      */
     reqestRehydrationError() {
       EventBus.$emit('toast', {
-            detail: {
-              msg: `Failed to submit your request, please try later.`,
-              type: 'ERROR',
-              class: 'request-submitted'
-            }
-          })
+        detail: {
+          msg: `Failed to submit your request, please try later.`,
+          type: 'ERROR',
+          class: 'request-submitted'
+        }
+      })
     },
     /**
-    * initialize recaptcha background process
-    */
+     * initialize recaptcha background process
+     */
     async intializeReacaptcha() {
-        try {
-        await this.$recaptcha.init();
-        } catch (e) {
-          console.error(e);
-        }
-     },
+      try {
+        await this.$recaptcha.init()
+      } catch (e) {
+        console.error(e)
+      }
+    }
   },
 
   beforeDestroy() {
@@ -271,8 +280,8 @@ export default {
   word-break: break-word;
 }
 
-.support-msg, h2 {
+.support-msg,
+h2 {
   margin-bottom: 16px;
 }
-
 </style>

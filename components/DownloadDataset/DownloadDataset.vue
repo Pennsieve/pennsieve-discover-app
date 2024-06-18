@@ -51,9 +51,13 @@
           </button>
           <h1>Requesting Access to Download from AWS</h1>
           <p>
-            In order to request access to download this dataset, we ask that you
-            please submit a rehydration request. This button will take you to a
-            form where you can submit your request.
+            Access to older versions of datasets are no longer available on AWS.
+            To obtain access to download this dataset, please Request Access to
+            fill our a form. More information is available on the
+            <a
+              href="https://docs.pennsieve.io/docs/requesting-rehydration-of-a-public-dataset"
+              >Pennsieve Documentation Hub</a
+            >.
           </p>
           <div class="rehydrate-dataset-container" v-if="!isLatestVersion">
             <div class="rehydration-btn-container">
@@ -63,7 +67,7 @@
                 class="rehydration-btn"
                 @click="openRehydrationModal"
               >
-                Request Rehydration
+                Request Access
               </bf-button>
             </div>
           </div>
