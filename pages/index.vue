@@ -194,6 +194,7 @@
 import { mapState } from 'vuex'
 
 import Request from '@/mixins/request'
+import AnnouncementBanner from '@/components/shared/AnnouncementBanner/AnnouncementBanner.vue'
 import BfHeader from '@/components/shared/BfHeader/BfHeader.vue'
 import BfFooter from '@/components/shared/BfFooter/BfFooter.vue'
 import DatasetListItemLoader from '@/components/DatasetListItemLoader/DatasetListItemLoader.vue'
@@ -208,6 +209,7 @@ export default {
   name: 'Home',
 
   components: {
+    AnnouncementBanner,
     BfHeader,
     BfFooter,
     DatasetListItemLoader,

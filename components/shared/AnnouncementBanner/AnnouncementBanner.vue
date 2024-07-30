@@ -7,20 +7,21 @@
         <a :href="getUrl" target="_blank">{{ linkText }}</a>
       </div>
 
-      <icon-remove
-        @click="handleClose"
-        class="close-btn"
-        :height="12"
-        :width="12"
-      />
+      <button class="close-btn" @click="handleClose">
+        <svg-icon
+          name="icon-remove"
+          width="12"
+          height="12"
+          color="#71747c"
+          class="close-icon"
+        />
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import icon-remove from "../../assets/icons/icon-remove.js";
 import { mapState } from "vuex";
-import { ref } from "vue";
 import Cookies from "js-cookie";
 
 export default {
@@ -46,44 +47,32 @@ export default {
       default: "",
     },
   },
-
-  setup(props) {
-    const showBanner = ref(true);
-    const isDismissed = ref(Cookies.get(`${props.cookieName}`));
-    function handleClose() {
-      showBanner.value = false;
-      Cookies.set(`${props.cookieName}`, "true");
-    }
-
+  data() {
     return {
-      isDismissed,
-      handleClose,
-      showBanner,
+      showBanner: true,
+      isDismissed: Cookies.get(this.cookieName) === "true"
     };
   },
   computed: {
     ...mapState(["config"]),
-    /**
-     * Returns link to previous version of Pennsieve App
-     * @returns {String}
-     */
-    getUrl: function () {
+    getUrl() {
       return this.url;
-    },
+    }
   },
-
-  components: { icon-remove },
-
   methods: {
-    toggleVisible: function (val) {
-      this.visible = val;
+    handleClose() {
+      this.showBanner = false;
+      Cookies.set(this.cookieName, "true");
     },
+    toggleVisible(val) {
+      this.visible = val;
+    }
   },
 };
 </script>
 
 <style scoped lang="scss">
-@import '../../assets/css/_variables.scss';
+@import '../../../assets/css/_variables.scss';
 
 .banner-wrapper {
   background-color: $purple_3;
