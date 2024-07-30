@@ -1,5 +1,5 @@
 <template>
-  <div class="banner-wrapper" v-if="!isDismissed">
+  <div v-if="!isDismissed">
     <div v-if="showBanner" class="banner">
       <span />
       <div>
@@ -74,22 +74,15 @@ export default {
 <style scoped lang="scss">
 @import '../../../assets/css/_variables.scss';
 
-.banner-wrapper {
-  background-color: $purple_2;
-  padding: 0.01px;
-}
-
 .banner {
   background-color: $purple_tint;
-  border: 1px solid $purple_2;
-  margin: 5px;
-  padding: 8px 0 8px 0;
+  border: 5px solid $purple_2;
+  padding: 8px 5px 8px 5px;
   color: $purple_2;
   display: flex;
   font-weight: bold;
   justify-content: space-between;
   text-align: center;
-
   a {
     color: $purple_2;
     text-decoration: underline;
