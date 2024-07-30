@@ -75,7 +75,8 @@ export default {
 @import '../../../assets/css/_variables.scss';
 
 .banner-wrapper {
-  background-color: $purple_3;
+  background-color: $purple_2;
+  padding: 0.01px;
 }
 
 .banner {
