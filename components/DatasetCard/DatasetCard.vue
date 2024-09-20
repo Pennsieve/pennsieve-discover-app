@@ -53,6 +53,12 @@
                 <span>{{ licenseAbbreviation }}</span>
               </el-tooltip>
             </div>
+            <div v-if="isCodeRepo" class="detail">
+              <svg-icon name="icon-code-repo" height="16" width="16" />
+              <span>
+                <strong>Code Repo</strong> 
+              </span>
+            </div>
           </div>
           <div v-if="hasSponsor" class="dataset-sponsor">
             <h4>Sponsored{{ dataset.sponsorship.title ? ' by' : '' }}</h4>
@@ -69,6 +75,7 @@
       <div v-else class="author">
         <strong>Dataset will be released on</strong> {{ getEmbargoReleaseDate }}
       </div>
+      <div>github icon</div>
       <div v-if="dataset.tags.length > 3" class="tags">
         <strong>{{ firstThreeTags.join(', ') }}</strong>
         <nuxt-link
@@ -137,6 +144,7 @@ export default {
           size: null,
           status: '',
           tags: [],
+          type: 'release',
           updatedAt: '',
           uri: '',
           version: null,
@@ -145,7 +153,6 @@ export default {
       }
     }
   },
-
   computed: {
     /** Formats the embargoed release date
      * @returns {String}
@@ -196,7 +203,12 @@ export default {
     lastUpdatedDate() {
       const date = this.dataset.revisedAt || this.dataset.versionPublishedAt
       return this.formatDate(date)
+    },
+
+    isCodeRepo(){
+      return this.dataset.type==="release"?true:false;
     }
+    
   },
 
   methods: {
@@ -217,6 +229,7 @@ export default {
 .dataset-card {
   border: solid 1px $cortex;
   border-radius: 3px 3px 0 0;
+
 }
 
 .dataset-content-wrap {
@@ -310,6 +323,7 @@ a {
     display: flex;
     flex-wrap: wrap;
     font-size: 12px;
+    flex: .2;
     @media (min-width: 992px) {
       display: block;
     }

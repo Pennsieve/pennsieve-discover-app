@@ -347,7 +347,6 @@ export default {
       referenceTypeOptions
     }
   },
-
   computed: {
     /**
      * Compute if the dataset is embargoed, has an agreement and
