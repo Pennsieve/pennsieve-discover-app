@@ -54,6 +54,10 @@
             <contributor-item :contributor="correspondingContributor" />
           </div>
         </div>
+        <div v-if="isCodeRepo" class="dataset-meta">
+          <b>Code Repo</b>
+          <svg-icon class="mr-8" name="icon-code-repo" height="30" width="30" />
+        </div>
         <bf-button
           v-if="isGetDatasetBtnVisible"
           key="btn-get-dataset"
@@ -255,10 +259,9 @@ export default {
       isVersionModalVisible: false,
       isContributorListVisible: true,
       isSigningAgreement: false,
-      isDataUseAgreementSignDialogVisible: false
+      isDataUseAgreementSignDialogVisible: false,
     }
   },
-
   computed: {
     ...mapState(['userToken']),
 
@@ -309,6 +312,13 @@ export default {
       return propOr(0, 'size', this.datasetDetails)
     },
 
+    /**
+     * computes if type of dataset is code repo/github repo
+     * @returns {bool}
+     */
+    isCodeRepo(){
+      return this.datasetDetails.type==="release"?true:false;
+    },
     /**
      * Gets dataset ID
      * @returns {Number}
@@ -481,7 +491,7 @@ export default {
 
   mounted() {
     EventBus.$on('close-version-dialog', this.closeVersionModal.bind(this))
-
+    console.log(this.datasetDetails)
     /**
      * Sets the contributors list to collapsed
      * if there are more than five contributors

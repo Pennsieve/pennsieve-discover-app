@@ -1,6 +1,7 @@
 [
   {"Icon":"AdobeIllustrator","SVG":"icon-vector.svg"},
   {"Icon":"ClinicalImageBrain","SVG":"icon-clinical.svg"},
+  {"Icon": "CodeRepo","SVG":"icon-code-repo.svg"},
   {"Icon":"Code","SVG":"icon-code.svg"},
   {"Icon":"Docker","SVG":"icon-docker.svg"},
   {"Icon":"Excel","SVG":"icon-excel.svg"},
