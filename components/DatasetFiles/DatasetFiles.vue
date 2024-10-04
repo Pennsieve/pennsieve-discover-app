@@ -165,7 +165,7 @@ import FileIcon from '@/mixins/file-icon/index'
 import FormatStorage from '@/mixins/bf-storage-metrics/index'
 
 const ROOT_PATH_NAME = 'Root Directory'
-const DEFAULT_ARCHIVE_NAME = 'blackfynn-discover-data'
+const DEFAULT_ARCHIVE_NAME = 'pennsieve-discover-data'
 
 export default {
   name: 'DatasetFiles',
@@ -440,7 +440,7 @@ export default {
     executeDownload() {
       const mainPayload = {
         paths: this.selected.map((f) => {
-          const expr = /(s3:\/\/[a-z-1]+\/[0-9]+\/[0-9]+\/)(.*)/
+          const expr = /(s3:\/\/[a-z-0-9]+\/[0-9]+\/(.*))/
           const match = f.uri.match(expr)
           return match[2]
         }),
