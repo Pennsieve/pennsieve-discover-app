@@ -57,6 +57,7 @@
               <svg-icon name="icon-code-repo" height="16" width="16" />
               <span>
                 <strong>Code Repo</strong> 
+                
               </span>
             </div>
           </div>
