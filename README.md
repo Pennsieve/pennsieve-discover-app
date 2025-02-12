@@ -30,6 +30,5 @@ The **Pennsieve Discover** app is hosted on [Heroku](https://heroku.com/). Speci
 
 ### Non-production
 Branch `dev`
-
 ### Production
 Branch `main`
