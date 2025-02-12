@@ -32,6 +32,7 @@ The **Pennsieve Discover** app is hosted on [Heroku](https://heroku.com/). Speci
 Branch `main` autodeploys to dev
 ### Production
 Branch `main` should be manually deployed to promote to production 
+
 Branch `prod` doesn't currently have a purpose in our workflow
 
 TODO: Update this branching strategy to match what we do in pennsieve-app
