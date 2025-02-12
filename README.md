@@ -29,7 +29,7 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 The **Pennsieve Discover** app is hosted on [Heroku](https://heroku.com/). Specifics on how the application is deployed can be found by logging into Heroku, clicking on *Deploy* tab, and then viewing the *Deployment method* section.
 
 ### Non-production
-Branch `main` autodeploys to dev
+Branch `main` autodeploys to non-prod environment 
 ### Production
 Branch `main` should be manually deployed to promote to production 
 
